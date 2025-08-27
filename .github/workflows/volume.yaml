@@ -1,0 +1,63 @@
+name: 01. Volumes
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Select the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+
+      config:
+        description: "Select the .env file to use"
+        required: true
+        type: choice
+        options:
+          - llm.env
+
+      action:
+        description: "Terraform action to perform"
+        required: true
+        type: choice
+        options:
+          - provision
+          - teardown
+        default: provision
+
+
+jobs:
+  create-restore-teardown:
+    name: Create / Restore / Teardown EBS Volume
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install boto3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-iac
+          aws-region: ${{ env.REGION }}
+
+      - name: Load the config and run the action
+        run: |
+          echo "Loading env file: ${{ inputs.config }}"
+          set -a
+          source "configs/${{ inputs.provider }}/${{ inputs.config }}"
+          set +a
+          PYTHONPATH=. python scripts/${{ inputs.provider }}/volume/${{ inputs.action }}.py

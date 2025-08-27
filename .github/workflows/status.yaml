@@ -1,0 +1,62 @@
+name: Generate Status Report
+
+on:
+  workflow_run:
+    workflows:
+      - 01. Volumes
+      - 02. Cluster
+    types:
+      - completed
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    name: Update Volume README
+
+    permissions:
+      id-token: write
+      contents: write
+
+    env:
+      AWS_DEFAULT_REGION: ca-central-1
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install boto3
+        run: pip install boto3
+
+      - name: Get AWS Account ID
+        id: get-account-id
+        run: |
+          # Use temporary credentials to get account ID
+          pip install awscli
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          echo "account-id=$ACCOUNT_ID" >> $GITHUB_OUTPUT
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ steps.get-account-id.outputs.account-id }}:role/github-actions-iac
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Generate status report
+        run: |
+          python scripts/status.py
+
+      - name: Commit README.md
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update EBS volume status report" || echo "No changes to commit"
+          git push

@@ -1,0 +1,764 @@
+name: 02. Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Select the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+
+      config:
+        description: "Select the .env file to use"
+        required: true
+        type: choice
+        options:
+          - kubyterlab-llm-ca-central-1.env
+
+      action:
+        description: "Action to perform"
+        required: true
+        type: choice
+        options:
+          - provision
+          - teardown
+        default: provision
+
+      debug:
+        description: "Enable extra diagnostics"
+        required: false
+        type: choice
+        options: ["false","true"]
+        default: "false"
+
+
+jobs:
+  provision:
+    if: github.event.inputs.action == 'provision'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # Common to all providers
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Kind
+        uses: helm/kind-action@v1
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.30.1'
+
+      - name: Install the Up CLI
+        run: |
+          curl -sL "https://cli.upbound.io" | sh
+          sudo mv up /usr/local/bin/
+          up version
+          up help
+
+      - name: Install Helm
+        run: |
+          echo "--- Let's try to access our kind cluster via kubectl"
+          kubectl get nodes
+          echo "⏳ Waiting for kube-apiserver to be ready..."
+          for i in {1..30}; do
+            ready=$(kubectl get --raw='/readyz' 2>/dev/null || true)
+            if [[ "$ready" == "ok" ]]; then
+              echo "✅ API server ready"
+              break
+            fi
+            sleep 5
+          done
+          if [[ "$ready" != "ok" ]]; then
+            echo "❌ kube-apiserver did not become ready in time"
+            exit 1
+          fi
+
+      - name: Install Upbound Universal Crossplane
+        run: |
+          echo "🚀 Installing Upbound Universal Crossplane..."
+          kubectl create namespace crossplane-system
+          helm repo add upbound-stable https://charts.upbound.io/stable && helm repo update
+          helm install uxp \
+            --namespace crossplane-system \
+            --version v1.20.1-up.1 \
+            upbound-stable/universal-crossplane \
+            --devel
+
+          echo "⏳ Waiting for crossplane-system namespace to be created..."
+          for i in {1..30}; do
+            if kubectl get namespace crossplane-system 2>/dev/null; then
+              echo "✅ crossplane-system namespace found"
+              break
+            fi
+            echo "Waiting for namespace... (attempt $i/30)"
+            sleep 5
+          done
+
+          if ! kubectl get namespace crossplane-system 2>/dev/null; then
+            echo "❌ crossplane-system namespace not found after timeout"
+            echo "Available namespaces:"
+            kubectl get namespaces
+            echo "All pods in all namespaces:"
+            kubectl get pods --all-namespaces
+            exit 1
+          fi
+
+      - name: (Debug) Early cluster snapshot after UXP install
+        if: ${{ github.event.inputs.debug == 'true' }}
+        run: |
+            echo "# Namespaces"
+            kubectl get ns
+            echo "# Pods (all namespaces)"
+            kubectl get pods -A -o wide || true
+            echo "# Deployments (crossplane-system)"
+            kubectl get deploy -n crossplane-system || true
+            echo "# CRDs count"
+            kubectl get crds | wc -l || true
+
+      - name: Wait for crossplane-system namespace & core deployments
+        run: |
+          set -euo pipefail
+          echo "⏳ Waiting for namespace crossplane-system ..."
+          for i in {1..24}; do
+            if kubectl get ns crossplane-system >/dev/null 2>&1; then
+              echo "✅ Namespace exists."
+              break
+            fi
+            echo "   Attempt $i: not found yet."
+            sleep 5
+          done
+          if ! kubectl get ns crossplane-system >/dev/null 2>&1; then
+            echo "❌ Namespace crossplane-system never appeared."
+            kubectl get ns
+            exit 1
+          fi
+
+          echo "⏳ Waiting for Crossplane deployments to be created..."
+          for i in {1..24}; do
+            READY_DEPLOY=$(kubectl get deploy -n crossplane-system 2>/dev/null | grep -E 'crossplane|crossplane-rbac-manager' || true)
+            if [[ -n "$READY_DEPLOY" ]]; then
+              echo "$READY_DEPLOY"
+              break
+            fi
+            echo "   Deployments not listed yet (attempt $i)."
+            sleep 5
+          done
+
+          echo "⏳ Waiting for deployment/crossplane ..."
+          kubectl wait --for=condition=Available deployment/crossplane -n crossplane-system --timeout=180s || {
+            echo "❌ crossplane deployment not Available, describing:"
+            kubectl -n crossplane-system describe deploy crossplane || true
+            kubectl -n crossplane-system get pods -l app=crossplane || true
+            exit 1
+          }
+          echo "⏳ Waiting for deployment/crossplane-rbac-manager ..."
+            kubectl wait --for=condition=Available deployment/crossplane-rbac-manager -n crossplane-system --timeout=180s || {
+              echo "❌ crossplane-rbac-manager not Available, describing:"
+              kubectl -n crossplane-system describe deploy crossplane-rbac-manager || true
+              kubectl -n crossplane-system get pods -l app=crossplane-rbac-manager || true
+              exit 1
+            }
+
+      - name: (Debug) Post-deployment readiness snapshot
+        if: ${{ github.event.inputs.debug == 'true' }}
+        run: |
+          kubectl get pods -n crossplane-system -o wide
+          kubectl describe deploy crossplane -n crossplane-system || true
+          kubectl describe deploy crossplane-rbac-manager -n crossplane-system || true
+
+      - name: Wait for Crossplane core controllers to initialize
+        run: |
+          set -euo pipefail
+          if ! kubectl get ns crossplane-system >/dev/null 2>&1; then
+            echo "❌ Namespace crossplane-system missing before controller wait step."
+            exit 1
+          fi
+          echo "⏳ Waiting for all Crossplane core controller pods to become Ready..."
+          for i in {1..36}; do
+            not_ready=$(kubectl -n crossplane-system get pods \
+              --selector=app.kubernetes.io/name=crossplane \
+              --output=jsonpath='{range .items[?(@.status.containerStatuses[*].ready==false)]}{.metadata.name}{"\n"}{end}' || true)
+            if [[ -z "$not_ready" ]]; then
+              echo "✅ All Crossplane core controller pods are Ready."
+              break
+            fi
+            echo "Attempt $i: still waiting on:"
+            echo "$not_ready"
+            sleep 5
+          done
+          if [[ -n "${not_ready:-}" ]]; then
+            echo "❌ Timeout waiting for Crossplane controllers."
+            kubectl -n crossplane-system get pods -o wide
+            for p in $(kubectl -n crossplane-system get pods -o name | grep crossplane || true); do
+              echo "---- logs $p ----"
+              kubectl -n crossplane-system logs "$p" --tail=200 || true
+            done
+            exit 1
+          fi
+          echo "📦 Final Crossplane pod statuses:"
+          kubectl -n crossplane-system get pods
+
+      - name: Set up environment variables from .env file
+        id: dotenv
+        run: |
+          echo "Loading config: configs/${{ github.event.inputs.provider }}/${{ github.event.inputs.config }}"
+          while IFS='=' read -r key value || [ -n "$key" ]; do
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < configs/${{ github.event.inputs.provider }}/${{ github.event.inputs.config }}
+
+      # Provider
+      - name: Install the Provider
+        run: |
+          echo "🔍 Checking current state before provider installation..."
+          kubectl get namespaces
+          kubectl get pods --all-namespaces | grep -E "(crossplane|upbound)" || echo "No crossplane/upbound pods found yet"
+
+          echo "✅ Waiting for Crossplane to be fully ready..."
+
+          # Wait for namespace to exist first
+          kubectl get namespace crossplane-system || (echo "❌ crossplane-system namespace missing" && exit 1)
+
+          # Wait for deployments to exist before waiting for them to be available
+          echo "⏳ Waiting for Crossplane deployments to be created..."
+          for i in {1..30}; do
+            if kubectl get deployment crossplane -n crossplane-system 2>/dev/null; then
+              echo "✅ crossplane deployment found"
+              break
+            fi
+            echo "Waiting for crossplane deployment... (attempt $i/30)"
+            sleep 5
+          done
+
+          for i in {1..30}; do
+            if kubectl get deployment crossplane-rbac-manager -n crossplane-system 2>/dev/null; then
+              echo "✅ crossplane-rbac-manager deployment found"
+              break
+            fi
+            echo "Waiting for crossplane-rbac-manager deployment... (attempt $i/30)"
+            sleep 5
+          done
+
+          # Now wait for them to be available
+          kubectl wait --for=condition=Available deployment/crossplane -n crossplane-system --timeout=120s
+          kubectl wait --for=condition=Available deployment/crossplane-rbac-manager -n crossplane-system --timeout=120s
+
+          echo "📦 Applying provider configuration..."
+          kubectl apply -f crossplane/${{ github.event.inputs.provider }}/provider.yaml
+          kubectl get providers
+
+      # Just for AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-iac
+          aws-region: ${{ env.REGION }}
+
+      - name: Create AWS credentials secret
+        if: github.event.inputs.provider == 'aws'
+        run: |
+          mkdir -p tmp
+          printf "[default]\naws_access_key_id=%s\naws_secret_access_key=%s\nregion=%s\n" \
+            "${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            "${{ env.REGION }}" > tmp/credentials
+
+          kubectl create secret generic aws-credentials \
+            -n crossplane-system \
+            --from-file=creds=tmp/credentials
+
+          AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
+          ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
+          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+
+      - name: Create IAM roles for cluster
+        if: github.event.inputs.provider == 'aws'
+        run: |
+          PYTHONPATH=. python scripts/${{ github.event.inputs.provider }}/cluster/provision_iam_cluster_role.py
+
+      - name: Wait for the provider pods
+        run: |
+          set -euo pipefail
+
+          NS=crossplane-system
+
+          # Wait for ALL providers to be healthy, not just EC2
+          echo "⏳ Waiting for all providers to become Healthy..."
+
+          # Get all provider names from the output
+          PROVIDERS=$(kubectl get providers -o jsonpath='{.items[*].metadata.name}')
+
+          for PROVIDER in $PROVIDERS; do
+            echo "⏳ Waiting for $PROVIDER to become Healthy..."
+            if ! kubectl wait provider.pkg/$PROVIDER --for=condition=Healthy --timeout=300s; then
+              echo "❌ $PROVIDER did not become Healthy in time"
+
+              # Show provider status
+              kubectl describe provider.pkg/$PROVIDER
+
+              # Find and show logs for this provider's pod
+              POD=$(kubectl -n $NS get pods -l pkg.crossplane.io/provider=$PROVIDER \
+                -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+
+              if [ -n "$POD" ]; then
+                echo "📄 Logs from $POD:"
+                kubectl -n $NS logs "$POD" --tail=100 || true
+
+                echo "📄 Pod description:"
+                kubectl -n $NS describe pod "$POD" || true
+              fi
+              exit 1
+            fi
+            echo "✅ $PROVIDER is Healthy"
+          done
+
+          # Wait for webhook endpoints to be ready
+          echo "⏳ Waiting for webhook endpoints to be ready..."
+
+          # Wait for the webhook service to have endpoints
+          for i in {1..30}; do
+            ENDPOINTS=$(kubectl -n $NS get endpoints provider-aws-ec2 -o jsonpath='{.subsets[*].addresses[*].ip}' 2>/dev/null || true)
+            if [[ -n "$ENDPOINTS" ]]; then
+              echo "✅ Webhook endpoints ready: $ENDPOINTS"
+              break
+            fi
+            echo "Waiting for webhook endpoints... (attempt $i/30)"
+            sleep 5
+          done
+
+          # Test webhook connectivity with more detailed output
+          echo "🔍 Testing webhook connectivity..."
+          kubectl run webhook-test --rm -i --restart=Never --image=curlimages/curl -- sh -c '
+            echo "Testing webhook endpoint..."
+            for i in $(seq 1 20); do
+              echo "Attempt $i: Testing https://provider-aws-ec2.crossplane-system.svc:9443/convert"
+              if curl -skv --connect-timeout 5 --max-time 10 https://provider-aws-ec2.crossplane-system.svc:9443/convert; then
+                echo "✅ Webhook endpoint responding"
+                exit 0
+              fi
+              echo "❌ Connection failed, retrying in 5s..."
+              sleep 5
+            done
+            echo "❌ Webhook endpoint not responding after 20 attempts"
+            exit 1
+          ' || echo "⚠️ Webhook test failed but continuing..."
+
+      - name: Wait for the provider to install
+        run: |
+          kubectl -n crossplane-system get pods
+          set -euo pipefail
+
+          echo "🔍 Scanning provider YAML files..."
+          PROVIDER_NAMES=$(find crossplane/ -name provider.yaml -exec yq eval-all '.metadata.name' {} \; | grep -v '^\s*$' | grep -v '^---$' | sort -u)
+
+
+          if [[ -z "$PROVIDER_NAMES" ]]; then
+            echo "❌ No provider.yaml files found or missing metadata.name"
+            exit 1
+          fi
+
+          echo "🔍 Found provider names:"
+          echo "$PROVIDER_NAMES"
+
+          for PROVIDER in $PROVIDER_NAMES; do
+            echo "⏳ Waiting for pod from provider: $PROVIDER"
+
+            # Wait until at least one matching pod appears
+            for i in {1..30}; do
+              POD=$(kubectl get pods -n crossplane-system -o name | grep "pod/$PROVIDER" || true)
+              if [[ -n "$POD" ]]; then
+                break
+              fi
+              echo "🔄 Waiting for pod to be created for $PROVIDER..."
+              sleep 5
+            done
+
+            if [[ -z "$POD" ]]; then
+              echo "❌ No pod found for provider $PROVIDER"
+              exit 1
+            fi
+
+            echo "✅ Found pod: $POD"
+
+            # Wait for the pod to be Ready (1/1 and Running)
+            if ! kubectl wait --for=condition=Ready "$POD" -n crossplane-system --timeout=150s; then
+              echo "❌ Pod $POD did not become ready in time"
+              kubectl describe "$POD" -n crossplane-system || true
+              exit 1
+            fi
+
+            echo "✅ Pod $POD is ready"
+          done
+
+          echo "🎉 All provider pods are up and running!"
+          kubectl -n crossplane-system get pods
+          POD=$(kubectl -n crossplane-system get pods -l pkg.crossplane.io/provider=provider-aws-ec2 -o jsonpath='{.items[0].metadata.name}')
+          echo "Pod: $POD"
+
+      # Provider Config
+      - name: Install the ProviderConfig
+        run: |
+          kubectl apply -f crossplane/${{ inputs.provider }}/providerconfig.yaml
+          kubectl get providerconfig
+
+      - name: Wait for the provider pods
+        run: |
+          set -euo pipefail
+
+          PROVIDER=provider-aws-ec2
+          NS=crossplane-system
+
+          echo "⏳ Waiting for $PROVIDER to become Healthy..."
+          if ! kubectl wait provider.pkg/$PROVIDER --for=condition=Healthy --timeout=300s; then
+            echo "❌ $PROVIDER did not become Healthy in time"
+            echo "🔎 Checking pods..."
+            kubectl -n $NS get pods -l pkg.crossplane.io/provider=$PROVIDER -o wide
+
+            POD=$(kubectl -n $NS get pods -l pkg.crossplane.io/provider=$PROVIDER \
+              -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+
+            if [ -n "$POD" ]; then
+              echo "📄 Logs from $POD:"
+              kubectl -n $NS logs "$POD" || true
+
+              echo "📄 Events from $POD:"
+              kubectl -n $NS describe pod "$POD" | sed -n '/Events:/,$p'
+            else
+              echo "⚠️  No pod found for $PROVIDER"
+            fi
+
+            echo "📡 Current services in $NS:"
+            kubectl -n $NS get svc
+            exit 1
+          fi
+
+          echo "✅ $PROVIDER is Healthy"
+
+      - name: Debug
+        if: ${{ github.event.inputs.debug == 'true' }}
+        run: |
+          kubectl get providers
+          kubectl get pods -n crossplane-system
+          kubectl get crds  | grep aws.upbound.io
+          kubectl get deployments -n crossplane-system
+          POD=$(kubectl -n crossplane-system get pods -l pkg.crossplane.io/provider=provider-aws-ec2 -o jsonpath='{.items[0].metadata.name}')
+          echo "Pod: $POD"
+          kubectl describe pod "$POD" -n crossplane-system || true
+          kubectl -n crossplane-system logs "$POD"
+
+      - name: Enhanced Debug for Provider Issues
+        if: ${{ github.event.inputs.debug == 'true' }}
+        run: |
+          echo "=== Enhanced Provider Debugging ==="
+
+          # Show all provider statuses
+          kubectl get providers -o wide
+
+          # Show detailed status for each provider
+          for provider in $(kubectl get providers -o jsonpath='{.items[*].metadata.name}'); do
+            echo "--- Provider: $provider ---"
+            kubectl describe provider.pkg/$provider
+            echo ""
+          done
+
+          # Show all pods with detailed status
+          kubectl -n crossplane-system get pods -o wide
+
+          # Show logs for all provider pods
+          for pod in $(kubectl -n crossplane-system get pods -o name | grep provider-); do
+            echo "--- Logs for $pod ---"
+            kubectl -n crossplane-system logs "$pod" --tail=50 || true
+            echo ""
+          done
+
+          # Show services and endpoints
+          kubectl -n crossplane-system get svc
+          kubectl -n crossplane-system get endpoints
+
+          # Show webhook configurations
+          kubectl get validatingwebhookconfigurations -o name | grep crossplane || true
+          kubectl get mutatingwebhookconfigurations -o name | grep crossplane || true
+      # ...existing code...
+
+      # Provision the Network
+      - name: Deploy the Network
+        run: |
+          DEPLOY=$(kubectl -n crossplane-system get deployments --no-headers -o custom-columns=NAME:.metadata.name | grep '^provider-aws-ec2' | head -n1)
+          echo "Deployment: $DEPLOY"
+
+          echo "⏳ Waiting for provider deployment..."
+          kubectl -n crossplane-system rollout status deployment/"$DEPLOY" --timeout=2m
+
+          echo "⏳ Waiting for provider pod to be Ready..."
+          kubectl wait pod -n crossplane-system -l pkg.crossplane.io/provider=provider-aws-ec2 --for=condition=Ready --timeout=2m || echo "⚠️ EC2 Provider control pod not ready"
+
+          POD=$(kubectl -n crossplane-system get pods -l pkg.crossplane.io/provider=provider-aws-ec2 -o jsonpath='{.items[0].metadata.name}')
+          echo "Pod: $POD"
+
+          kubectl wait --for=condition=Established \
+            crd/vpcs.ec2.aws.upbound.io \
+            crd/routes.ec2.aws.upbound.io \
+            --timeout=60s
+
+          kubectl wait providerrevision "$DEPLOY" \
+            -n crossplane-system \
+            --for=condition=Healthy \
+            --timeout=60s
+
+
+          echo "🚀 Creating VPC..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/vpc.yaml | kubectl apply -f -
+
+          echo "⏳ Waiting for VPC to become ready..."
+          if ! kubectl wait vpc.ec2.aws.upbound.io/${CLUSTER_NAME}-vpc --for=condition=Ready --timeout=5m; then
+            echo "❌ VPC failed to become ready, debugging..."
+            kubectl describe vpc.ec2.aws.upbound.io/${CLUSTER_NAME}-vpc
+            kubectl get events -n default --sort-by=.lastTimestamp | tail -20
+            echo "=== VPC Creation Debug ==="
+
+            # Show the actual VPC manifest being applied
+            echo "--- VPC Manifest ---"
+            envsubst < manifests/${{ github.event.inputs.provider }}/network.vpc.yaml
+
+            # Show VPC status
+            echo "--- VPC Status ---"
+            kubectl get vpc.ec2.aws.upbound.io/${CLUSTER_NAME}-vpc -o yaml || true
+
+            # Show provider credentials
+            echo "--- Provider Config ---"
+            kubectl get providerconfig -o yaml || true
+
+            # Show recent events
+            echo "--- Recent Events ---"
+            kubectl get events --sort-by=.lastTimestamp | tail -20 || true
+            exit 1
+          fi
+          echo "✅ VPC is ready"
+
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/subnets.yaml | kubectl apply -f -
+
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/igw.yaml | kubectl apply -f -
+          kubectl wait internetgateway.ec2.aws.upbound.io/${CLUSTER_NAME}-igw --for=condition=Ready --timeout=2m
+
+          # Create EIP and NAT Gateway for private subnet internet access
+          echo "🌐 Creating Elastic IP for NAT Gateway..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/eip.yaml | kubectl apply -f -
+          kubectl wait eip.ec2.aws.upbound.io/${CLUSTER_NAME}-nat-eip --for=condition=Ready --timeout=2m
+
+          echo "🚪 Creating NAT Gateway..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/nat.yaml | kubectl apply -f -
+          kubectl wait natgateway.ec2.aws.upbound.io/${CLUSTER_NAME}-nat --for=condition=Ready --timeout=5m
+
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/igw.route.yaml | kubectl apply -f -
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/routetable.yaml | kubectl apply -f -
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/routetableassoc.yaml | kubectl apply -f -
+
+          # Create route from private subnets to NAT Gateway
+          echo "🛣️ Creating NAT Gateway route for private subnets..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/network.nat.route.yaml | kubectl apply -f -
+          kubectl wait route.ec2.aws.upbound.io/${CLUSTER_NAME}-private --for=condition=Ready --timeout=2m
+
+          echo "🔒 Creating security group..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/perproject/${CLUSTER_NAME}/sg.yaml | kubectl apply -f -
+
+          echo "⏳ Waiting for security group to be ready..."
+          # TODO: Automatically get the name of the security group.
+          kubectl wait securitygroups.ec2.aws.upbound.io/${{ env.CLUSTER_NAME }}-sg --for=condition=Ready --timeout=5m
+
+      # Provision the Cluster
+      - name: Deploy the Cluster
+        run: |
+
+      - name: Get Resource IDs and Create Cluster
+        run: |
+          # Wait for all resources to be ready first
+          echo "⏳ Waiting for all network resources to be ready..."
+          kubectl wait subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-private-${REGION}a --for=condition=Ready --timeout=10m
+          kubectl wait subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-private-${REGION}b --for=condition=Ready --timeout=10m
+          kubectl wait subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-public-${REGION}a --for=condition=Ready --timeout=10m
+          kubectl wait subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-public-${REGION}b --for=condition=Ready --timeout=10m
+          kubectl wait securitygroup.ec2.aws.upbound.io/${CLUSTER_NAME}-sg --for=condition=Ready --timeout=10m
+
+          echo "📋 Checking resource status..."
+          kubectl get subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-private-${REGION}a -o yaml
+          kubectl get securitygroup.ec2.aws.upbound.io/${CLUSTER_NAME}-sg -o yaml
+
+          # Extract actual AWS resource IDs with error checking
+          echo "🔍 Extracting resource IDs..."
+
+          PRIVATE_SUBNET_A_ID=$(kubectl get subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-private-${REGION}a -o jsonpath='{.status.atProvider.id}' 2>/dev/null || echo "")
+          PRIVATE_SUBNET_B_ID=$(kubectl get subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-private-${REGION}b -o jsonpath='{.status.atProvider.id}' 2>/dev/null || echo "")
+          PUBLIC_SUBNET_A_ID=$(kubectl get subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-public-${REGION}a -o jsonpath='{.status.atProvider.id}' 2>/dev/null || echo "")
+          PUBLIC_SUBNET_B_ID=$(kubectl get subnet.ec2.aws.upbound.io/${CLUSTER_NAME}-public-${REGION}b -o jsonpath='{.status.atProvider.id}' 2>/dev/null || echo "")
+          SECURITY_GROUP_ID=$(kubectl get securitygroup.ec2.aws.upbound.io/${CLUSTER_NAME}-sg -o jsonpath='{.status.atProvider.id}' 2>/dev/null || echo "")
+
+          # Check if IDs were extracted successfully
+          if [[ -z "$PRIVATE_SUBNET_A_ID" || -z "$PRIVATE_SUBNET_B_ID" || -z "$PUBLIC_SUBNET_A_ID" || -z "$PUBLIC_SUBNET_B_ID" || -z "$SECURITY_GROUP_ID" ]]; then
+            echo "❌ Failed to extract all resource IDs:"
+            echo "Private Subnet A: '$PRIVATE_SUBNET_A_ID'"
+            echo "Private Subnet B: '$PRIVATE_SUBNET_B_ID'"
+            echo "Public Subnet A: '$PUBLIC_SUBNET_A_ID'"
+            echo "Public Subnet B: '$PUBLIC_SUBNET_B_ID'"
+            echo "Security Group: '$SECURITY_GROUP_ID'"
+            exit 1
+          fi
+
+          echo "✅ Resource IDs extracted successfully:"
+          echo "Private Subnet A: $PRIVATE_SUBNET_A_ID"
+          echo "Private Subnet B: $PRIVATE_SUBNET_B_ID"
+          echo "Public Subnet A: $PUBLIC_SUBNET_A_ID"
+          echo "Public Subnet B: $PUBLIC_SUBNET_B_ID"
+          echo "Security Group: $SECURITY_GROUP_ID"
+
+          # Export for envsubst
+          export PRIVATE_SUBNET_A_ID
+          export PRIVATE_SUBNET_B_ID
+          export PUBLIC_SUBNET_A_ID
+          export PUBLIC_SUBNET_B_ID
+          export SECURITY_GROUP_ID
+
+          # Now create the cluster with actual IDs
+          echo "🚀 Creating EKS cluster with extracted IDs..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/perproject/${{ env.CLUSTER_NAME }}/cluster.yaml | kubectl apply -f -
+
+          echo "📋 Cluster manifest applied, checking status..."
+          kubectl get clusters.eks.aws.upbound.io/${CLUSTER_NAME} -o yaml
+
+          echo "⏳ Waiting for cluster to be ready..."
+          if ! kubectl wait clusters.eks.aws.upbound.io/${CLUSTER_NAME} --for=condition=Ready --timeout=8m; then
+            echo "❌ Cluster failed to become ready, debugging..."
+            kubectl describe clusters.eks.aws.upbound.io/${CLUSTER_NAME}
+            kubectl get events --sort-by=.lastTimestamp | tail -20
+            exit 1
+          fi
+
+          echo "✅ Cluster is ready!"
+
+          # Create the node group(s)
+          echo "🚀 Creating EKS node group(s)..."
+          envsubst < manifests/${{ github.event.inputs.provider }}/perproject/${CLUSTER_NAME}/ng.yaml | kubectl apply -f -
+
+          echo "⏳ Waiting for node group to be ready..."
+          if ! kubectl wait nodegroup.eks.aws.upbound.io/${CLUSTER_NAME}-ng-default --for=condition=Ready --timeout=20m; then
+            echo "❌ Node group failed to become ready, debugging..."
+
+            # Show detailed node group status
+            echo "=== Node Group Status ==="
+            kubectl describe nodegroup.eks.aws.upbound.io/${CLUSTER_NAME}-ng-default
+
+            # Show recent events
+            echo "=== Recent Events ==="
+            kubectl get events --sort-by=.lastTimestamp | tail -30
+
+            # Show all managed resources status
+            echo "=== All Managed Resources ==="
+            kubectl get managed --all-namespaces
+
+            exit 1
+          fi
+
+          echo "✅ Node group is ready!"
+
+          # TODO: Add back in NAT & EIP when needed.
+
+          # kubectl wait vpc.ec2.aws.upbound.io/${CLUSTER_NAME}-vpc --for=condition=Ready --timeout=3m
+          # kubectl wait internetgateway.ec2.aws.upbound.io/${CLUSTER_NAME}-igw --for=condition=Ready --timeout=3m
+          # kubectl wait natgateway.ec2.aws.upbound.io/${CLUSTER_NAME}-nat --for=condition=Ready --timeout=3m
+
+
+
+      - name: Debug
+        run: |
+          kubectl get events -A --sort-by=.metadata.creationTimestamp | tail -n 30
+          kubectl get vpcs.ec2.aws.upbound.io ${{ env.CLUSTER_NAME }}-vpc -o jsonpath='{.status.atProvider.vpcId}{"\n"}'
+          kubectl get managed --all-namespaces
+
+      - name: Diagnostics (always)
+        if: ${{ always() }}
+        run: |
+          echo "=== Diagnostics (always) ==="
+          echo "# Timestamp: $(date -u)"
+          echo "# Inputs: provider=${{ github.event.inputs.provider }} action=${{ github.event.inputs.action }} debug=${{ github.event.inputs.debug }}"
+          echo "# Namespaces:"
+          kubectl get ns || true
+          echo "# crossplane-system deploys:"
+          kubectl get deploy -n crossplane-system || true
+          echo "# crossplane-system pods:"
+          kubectl get pods -n crossplane-system -o wide || true
+          echo "# Relevant events:"
+          kubectl get events -n crossplane-system --sort-by=.lastTimestamp | tail -n 50 || true
+          echo "# All CRDs count:"
+          kubectl get crds | wc -l || true
+          echo "# Provider objects:"
+          kubectl get providers || true
+          echo "# Describe crossplane (if exists):"
+          kubectl -n crossplane-system describe deploy crossplane || true
+          echo "# Logs (crossplane)* (last 200 lines each):"
+          for p in $(kubectl -n crossplane-system get pods -o name 2>/dev/null | grep crossplane || true); do
+            echo "---- $p ----"
+            kubectl -n crossplane-system logs "$p" --tail=200 || true
+          done
+
+  teardown:
+    if: github.event.inputs.action == 'teardown'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      # Common to all providers
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install boto3
+
+      - name: Set up environment variables from .env file
+        id: dotenv
+        run: |
+          echo "Loading config: configs/${{ github.event.inputs.provider }}/${{ github.event.inputs.config }}"
+          while IFS='=' read -r key value || [ -n "$key" ]; do
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < configs/${{ github.event.inputs.provider }}/${{ github.event.inputs.config }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-iac
+          aws-region: ca-central-1
+
+      - name: Teardown
+        if: github.event.inputs.action == 'teardown'
+        run: |
+          echo "Loading env file: ${{ inputs.config }}"
+          set -a
+          source "configs/${{ inputs.provider }}/${{ inputs.config }}"
+          set +a
+          PYTHONPATH=. python scripts/${{ inputs.provider }}/network/${{ inputs.action }}.py
+
+      - name: Teardown IAM roles for cluster
+        if: github.event.inputs.provider == 'aws'
+        run: |
+          PYTHONPATH=. python scripts/${{ github.event.inputs.provider }}/cluster/teardown_iam_cluster_role.py
+
+      - name: Diagnostics (always)
+        if: ${{ always() }}
+        run: |
+          echo "=== Teardown diagnostics ==="
+          kubectl get ns || true
+          kubectl get pods -A || true
+          kubectl get events -A --sort-by=.lastTimestamp | tail -n 40 || true

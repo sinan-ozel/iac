@@ -1,0 +1,51 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTableAssociation
+metadata:
+  name: ${CLUSTER_NAME}-private-${REGION}a
+spec:
+  forProvider:
+    region: ${REGION}
+    routeTableIdRef:
+      name: ${CLUSTER_NAME}-private
+    subnetIdRef:
+      name: ${CLUSTER_NAME}-private-${REGION}a
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTableAssociation
+metadata:
+  name: ${CLUSTER_NAME}-private-${REGION}b
+spec:
+  forProvider:
+    region: ${REGION}
+    routeTableIdRef:
+      name: ${CLUSTER_NAME}-private
+    subnetIdRef:
+      name: ${CLUSTER_NAME}-private-${REGION}b
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTableAssociation
+metadata:
+  name: ${CLUSTER_NAME}-public-${REGION}a
+spec:
+  forProvider:
+    region: ${REGION}
+    routeTableIdRef:
+      name: ${CLUSTER_NAME}-public
+    subnetIdRef:
+      name: ${CLUSTER_NAME}-public-${REGION}a
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTableAssociation
+metadata:
+  name: ${CLUSTER_NAME}-public-${REGION}b
+spec:
+  forProvider:
+    region: ${REGION}
+    routeTableIdRef:
+      name: ${CLUSTER_NAME}-public
+    subnetIdRef:
+      name: ${CLUSTER_NAME}-public-${REGION}b
+  deletionPolicy: Delete

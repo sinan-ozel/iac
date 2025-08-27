@@ -1,0 +1,50 @@
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroup
+metadata:
+  name: ${CLUSTER_NAME}-sg
+spec:
+  forProvider:
+    description: "Cluster access"
+    region: ${REGION}
+    vpcIdSelector:
+      matchLabels:
+        purpose: ${CLUSTER_NAME}
+    tags:
+      ManagedBy: Crossplane
+      Name: ${CLUSTER_NAME}-sg
+      purpose: ${CLUSTER_NAME}
+  providerConfigRef:
+    name: default
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroupIngressRule
+metadata:
+  name: ${CLUSTER_NAME}-sg-ingress
+spec:
+  forProvider:
+    cidrIpv4: 0.0.0.0/0
+    fromPort: 8888
+    toPort: 8888
+    ipProtocol: tcp
+    description: Default Jupyterlab Port
+    region: ${REGION}
+    securityGroupIdRef:
+      name: ${CLUSTER_NAME}-sg
+  providerConfigRef:
+    name: default
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroupEgressRule
+metadata:
+  name: ${CLUSTER_NAME}-sg-egress
+spec:
+  forProvider:
+    cidrIpv4: 0.0.0.0/0
+    ipProtocol: "-1"
+    description: Allow all outbound
+    region: ${REGION}
+    securityGroupIdRef:
+      name: ${CLUSTER_NAME}-sg
+  providerConfigRef:
+    name: default

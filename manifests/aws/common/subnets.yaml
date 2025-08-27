@@ -1,0 +1,81 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: ${CLUSTER_NAME}-private-${REGION}a
+  labels:
+    name: ${CLUSTER_NAME}-private-${REGION}a
+    purpose: ${CLUSTER_NAME}
+spec:
+  forProvider:
+    availabilityZone: ${REGION}a
+    cidrBlock: 10.100.1.0/24
+    region: ${REGION}
+    tags:
+      Name: ${CLUSTER_NAME}-private-${REGION}a
+      ManagedBy: Crossplane
+      purpose: ${CLUSTER_NAME}
+    vpcIdRef:
+      name: ${CLUSTER_NAME}-vpc
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: ${CLUSTER_NAME}-private-${REGION}b
+  labels:
+    name: ${CLUSTER_NAME}-private-${REGION}b
+    purpose: ${CLUSTER_NAME}
+spec:
+  forProvider:
+    availabilityZone: ${REGION}b
+    cidrBlock: 10.100.2.0/24
+    region: ${REGION}
+    tags:
+      Name: ${CLUSTER_NAME}-private-${REGION}b
+      ManagedBy: Crossplane
+      purpose: ${CLUSTER_NAME}
+    vpcIdRef:
+      name: ${CLUSTER_NAME}-vpc
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: ${CLUSTER_NAME}-public-${REGION}a
+  labels:
+    name: ${CLUSTER_NAME}-public-${REGION}a
+    purpose: ${CLUSTER_NAME}
+spec:
+  forProvider:
+    availabilityZone: ${REGION}a
+    cidrBlock: 10.100.3.0/24
+    region: ${REGION}
+    tags:
+      Name: ${CLUSTER_NAME}-public-${REGION}a
+      ManagedBy: Crossplane
+      purpose: ${CLUSTER_NAME}
+      "kubernetes.io/role/elb": "1"
+    vpcIdRef:
+      name: ${CLUSTER_NAME}-vpc
+  deletionPolicy: Delete
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: ${CLUSTER_NAME}-public-${REGION}b
+  labels:
+    name: ${CLUSTER_NAME}-public-${REGION}b
+    purpose: ${CLUSTER_NAME}
+spec:
+  forProvider:
+    availabilityZone: ${REGION}b
+    cidrBlock: 10.100.4.0/24
+    region: ${REGION}
+    tags:
+      Name: ${CLUSTER_NAME}-public-${REGION}b
+      ManagedBy: Crossplane
+      purpose: ${CLUSTER_NAME}
+      "kubernetes.io/role/elb": "1"
+    vpcIdRef:
+      name: ${CLUSTER_NAME}-vpc
+  deletionPolicy: Delete
