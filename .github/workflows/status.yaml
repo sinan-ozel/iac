@@ -53,10 +53,10 @@ jobs:
         run: |
           python scripts/status.py
 
-      - name: Commit README.md
+      - name: Commit STATUS.md
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add README.md
+          git add STATUS.md
           git commit -m "Update EBS volume status report" || echo "No changes to commit"
           git push
