@@ -159,8 +159,37 @@ And also attash two "inline policies" - replace the `...` with your 12-digit acc
 }
 ```
 
+And the Trust Policy for the Role needs to be:
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::275678099358:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                },
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:sinan-ozel/iac:*"
+                }
+            }
+        }
+    ]
+}
+```
+Note that the repo here needs to be switched to yours, i.e. replace `repo:sinan-ozel/iac:*` with yours.
+
 # 🏗️ Structure
 
 * `manifests/*/common` holds all the Crossplane configuration common to all projects. `*` here is the cloud provider. Right now I only have `aws`, the plan is to imclude a second one soon.
 * `manifests/*/perproject` holds all of the Crossplane configuration specific to a project. For example, the project can be "such-an-such microservice" or something bigger like a full SaaS product. The point is that it is deployed on a cluster.
 * `configs/*/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
+
+# Known Issues
+1. If you run provision two times back to back for the same project and configuration, it generates the resources two times. That is not intentional, I was expecting Crossplane to reconcile. I am trying to find out how to do it. Basically, the provision section should be such that it does not generate something if it already exists. (Everything is cleaned up during the teardown, so this is easily worked around, even if we forget and deploy something twice.)
+2. During the teardown, there needs to be an additional wait after the routes are deleted. This results in an error, the workaround is to run it again.

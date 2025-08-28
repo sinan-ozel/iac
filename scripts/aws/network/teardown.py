@@ -47,15 +47,6 @@ def get_subnet_ids_in_vpc(vpc_id: str) -> list[str]:
     return subnet_ids
 
 
-# def get_route_table_ids_for_vpc(vpc_id: str):
-#     response = ec2_client.describe_route_tables()
-#     rt_ids = []
-#     for route_table in response['RouteTables']:
-#         if route_table['VpcId'] == vpc_id:
-#             rt_ids.append(route_table['RouteTableId'])
-#     return rt_ids
-
-
 def get_route_tables_for_vpc(vpc_id: str):
     response = ec2_client.describe_route_tables()
     rts = []
@@ -65,10 +56,42 @@ def get_route_tables_for_vpc(vpc_id: str):
     return rts
 
 
+def get_elastic_ips_for_vpc(vpc_id: str) -> list[dict]:
+    """Get all Elastic IPs associated with a VPC"""
+    addresses = ec2_client.describe_addresses()
+    vpc_eips = []
+
+    for addr in addresses['Addresses']:
+        if addr.get('Domain') == 'vpc':
+            # Check if EIP is associated with resources in our VPC
+            associated_with_vpc = False
+
+            if 'NetworkInterfaceId' in addr:
+                try:
+                    eni = ec2_client.describe_network_interfaces(NetworkInterfaceIds=[addr['NetworkInterfaceId']])
+                    if eni['NetworkInterfaces'][0]['VpcId'] == vpc_id:
+                        associated_with_vpc = True
+                except:
+                    continue
+            elif 'InstanceId' in addr:
+                try:
+                    instance = ec2_client.describe_instances(InstanceIds=[addr['InstanceId']])
+                    if instance['Reservations'][0]['Instances'][0]['VpcId'] == vpc_id:
+                        associated_with_vpc = True
+                except:
+                    continue
+
+            if associated_with_vpc:
+                vpc_eips.append(addr)
+
+    return vpc_eips
+
+
 session = boto3.Session(region_name=REGION)
 ec2_client = session.client('ec2')
 elb_client = session.client('elb')
 eks_client = session.client('eks')
+iam_client = session.client('iam')
 
 try:
     node_groups = eks_client.list_nodegroups(clusterName=CLUSTER_NAME).get('nodegroups', [])
@@ -154,7 +177,17 @@ response = ec2_client.describe_vpcs(Filters=[{'Name': f'tag:purpose', 'Values': 
 vpc_ids = [vpc['VpcId'] for vpc in response['Vpcs']]
 print(f"Found the following VPCs: {vpc_ids}. Deleting.")
 for vpc_id in vpc_ids:
-    # Delete NAT Gateways first (they hold Elastic IPs)
+    # First, release all Elastic IPs associated with the VPC
+    print(f"Releasing Elastic IPs for VPC {vpc_id}...")
+    elastic_ips = get_elastic_ips_for_vpc(vpc_id)
+    for eip in elastic_ips:
+        try:
+            print(f"Releasing Elastic IP: {eip['AllocationId']} ({eip.get('PublicIp', 'N/A')})")
+            ec2_client.release_address(AllocationId=eip['AllocationId'])
+        except Exception as e:
+            print(f"Warning: Failed to release EIP {eip['AllocationId']}: {e}")
+
+    # Delete NAT Gateways (they may have had EIPs)
     nat_gateways = ec2_client.describe_nat_gateways(Filters=[{'Name': 'vpc-id', 'Values': [vpc_id]}])
     for nat_gw in nat_gateways['NatGateways']:
         if nat_gw['State'] != 'deleted':
@@ -171,29 +204,23 @@ for vpc_id in vpc_ids:
             wait_interval=10
         )
 
-    # Release Elastic IPs associated with the VPC
-    addresses = ec2_client.describe_addresses()
-    for addr in addresses['Addresses']:
-        if addr.get('Domain') == 'vpc':
-            # Check if this EIP is associated with any resources in our VPC
-            if 'NetworkInterfaceId' in addr:
-                eni = ec2_client.describe_network_interfaces(NetworkInterfaceIds=[addr['NetworkInterfaceId']])
-                if eni['NetworkInterfaces'][0]['VpcId'] == vpc_id:
-                    print(f"Releasing Elastic IP: {addr['AllocationId']}")
-                    ec2_client.release_address(AllocationId=addr['AllocationId'])
-            elif 'InstanceId' in addr:
-                instance = ec2_client.describe_instances(InstanceIds=[addr['InstanceId']])
-                if instance['Reservations'][0]['Instances'][0]['VpcId'] == vpc_id:
-                    print(f"Releasing Elastic IP: {addr['AllocationId']}")
-                    ec2_client.release_address(AllocationId=addr['AllocationId'])
+    # Double-check and release any remaining Elastic IPs after NAT Gateway deletion
+    print("Double-checking for any remaining Elastic IPs...")
+    remaining_eips = get_elastic_ips_for_vpc(vpc_id)
+    for eip in remaining_eips:
+        try:
+            print(f"Releasing remaining Elastic IP: {eip['AllocationId']} ({eip.get('PublicIp', 'N/A')})")
+            ec2_client.release_address(AllocationId=eip['AllocationId'])
+        except Exception as e:
+            print(f"Warning: Failed to release remaining EIP {eip['AllocationId']}: {e}")
 
     route_tables = get_route_tables_for_vpc(vpc_id)
     for route_table in route_tables:
         for route in route_table["Routes"]:
-            print(route.get('GatewayId'))
             if route.get("GatewayId", "").startswith("igw-"):
                 print(f"Deleting route to {route['GatewayId']} in Route Table {route_table['RouteTableId']}...")
                 ec2_client.delete_route(RouteTableId=route_table["RouteTableId"], DestinationCidrBlock=route["DestinationCidrBlock"])
+                sleep(1)
 
     wait_until(
         check=get_route_tables_for_vpc,
@@ -259,12 +286,26 @@ for vpc_id in vpc_ids:
         cond=lambda x: len(x) == 0
     )
 
-    # route_table_ids = get_route_table_ids_for_vpc(vpc_id)
-    # for route_table_id in route_table_ids:
-    #     # route_table = ec2_client.describe_route_tables(RouteTableIds=[route_table_id])['RouteTables'][0]
-    #     # for route in route_table['Routes']:
-    #     #     if route.get('State') == 'blackhole':
-    #     #         ec2_client.delete_route(RouteTableId=route_table_id, DestinationCidrBlock=route['DestinationCidrBlock'])
-    #     response = ec2_client.delete_route_table(RouteTableId=route_table_id)
-    #     print(response['ResponseMetadata'])
-    #     print(response['ResponseMetadata'])
+# Clean up IAM roles
+print("Cleaning up IAM roles...")
+cluster_role_name = f'{CLUSTER_NAME}-eks-role'
+node_role_name = f'{CLUSTER_NAME}-node-role'
+
+for role_name in [cluster_role_name, node_role_name]:
+    try:
+        # First, detach all policies from the role
+        attached_policies = iam_client.list_attached_role_policies(RoleName=role_name)
+        for policy in attached_policies['AttachedPolicies']:
+            print(f"Detaching policy {policy['PolicyName']} from role {role_name}")
+            iam_client.detach_role_policy(RoleName=role_name, PolicyArn=policy['PolicyArn'])
+
+        # Delete the role
+        print(f"Deleting IAM role: {role_name}")
+        iam_client.delete_role(RoleName=role_name)
+        print(f"Successfully deleted role: {role_name}")
+    except iam_client.exceptions.NoSuchEntityException:
+        print(f"Role {role_name} does not exist, skipping deletion.")
+    except Exception as e:
+        print(f"Error deleting role {role_name}: {e}")
+
+print("Teardown complete!")
