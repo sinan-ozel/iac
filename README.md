@@ -9,20 +9,20 @@ The provisionining happens through a mixture of Python scripts, Crossplane manif
 
 ## ✨ Features
 
-🚀 **One-Click Deployment** - Deploy entire Kubernetes clusters with a single GitHub Actions workflow
-⚡ **Lightning Fast Recovery** - Recover from catastrophic failures in hours, not days
-🔄 **Declarative Infrastructure** - YAML-based configuration using Crossplane for reproducible deployments
-🌍 **Multi-Provider Ready** - Built to extend beyond AWS to other cloud providers
-📦 **Per-Project Isolation** - Create dedicated clusters for each project with isolated resources
-🎯 **Environment Flexibility** - Deploy dev, test, and production environments with simple config changes
-💾 **Persistent Storage Management** - Automated provisioning of volumes and buckets
-🔐 **Security-First** - IAM roles and policies configured with least-privilege principles (OK, there is room for improvement in this regard... It's still a good place to start, though)
-📊 **Cost Optimized** - Tear down resources completely when not needed to minimize cloud costs
-🛠️ **Developer Friendly** - Simple configuration files, no complex scripting required
-⚖️ **Hybrid Approach** - Best of both worlds: declarative configuration for visibility, imperative scripts for complex workflows
-🚫 **Zero Installation** - No local tools required beyond GitHub Actions - everything runs in the cloud
-📋 **Automated Status Report** - Automatic infrastructure health checks generate [STATUS.md] reports in your repo
-🔍 **Configuration Validation** - GitHub Actions automatically check for duplicate configurations on commits to main
+* 🚀 **One-Click Deployment** - Deploy entire Kubernetes clusters with a single GitHub Actions workflow
+* ⚡ **Lightning Fast Recovery** - Recover from catastrophic failures in hours, not days
+* 🔄 **Declarative Infrastructure** - YAML-based configuration using Crossplane for reproducible deployments
+* 🌍 **Multi-Provider Ready** - Built to extend beyond AWS to other cloud providers
+* 📦 **Per-Project Isolation** - Create dedicated clusters for each project with isolated resources
+* 🎯 **Environment Flexibility** - Deploy dev, test, and production environments with simple config changes
+* 💾 **Persistent Storage Management** - Automated provisioning of volumes and buckets
+* 🔐 **Security-First** - IAM roles and policies configured with least-privilege principles (OK, there is room for improvement in this regard... It's still a good place to start, though)
+* 💰 **Cost Optimized** - Tear down resources completely when not needed to minimize cloud costs
+* 🛠️ **Developer Friendly** - Simple configuration files, no complex scripting required
+* ⚖️ **Hybrid Approach** - Best of both worlds: declarative configuration for visibility, imperative scripts for complex workflows
+* 🚫 **Zero Installation** - No local tools required beyond GitHub Actions - everything runs in the cloud
+* 📋 **Automated Status Report** - Automatic infrastructure health checks generate [STATUS.md] reports in your repo
+* 🔍 **Configuration Checks** - GitHub Actions automatically check for duplicate configurations on commits to main
 
 
 
