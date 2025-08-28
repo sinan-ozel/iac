@@ -1,0 +1,13 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Route
+metadata:
+  name: ${CLUSTER_NAME}-private
+spec:
+  forProvider:
+    destinationCidrBlock: 0.0.0.0/0
+    natGatewayIdRef:
+      name: ${CLUSTER_NAME}-nat
+    region: ${REGION}
+    routeTableIdRef:
+      name: ${CLUSTER_NAME}-private
+  deletionPolicy: Delete

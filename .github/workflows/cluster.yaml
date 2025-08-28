@@ -562,7 +562,7 @@ jobs:
 
           # Create route from private subnets to NAT Gateway
           echo "🛣️ Creating NAT Gateway route for private subnets..."
-          envsubst < manifests/${{ github.event.inputs.provider }}/network.nat.route.yaml | kubectl apply -f -
+          envsubst < manifests/${{ github.event.inputs.provider }}/common/nat.route.yaml | kubectl apply -f -
           kubectl wait route.ec2.aws.upbound.io/${CLUSTER_NAME}-private --for=condition=Ready --timeout=2m
 
           echo "🔒 Creating security group..."
