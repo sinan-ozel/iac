@@ -193,3 +193,8 @@ Note that the repo here needs to be switched to yours, i.e. replace `repo:sinan-
 # Known Issues
 1. If you run provision two times back to back for the same project and configuration, it generates the resources two times. That is not intentional, I was expecting Crossplane to reconcile. I am trying to find out how to do it. Basically, the provision section should be such that it does not generate something if it already exists. (Everything is cleaned up during the teardown, so this is easily worked around, even if we forget and deploy something twice.)
 2. During the teardown, there needs to be an additional wait after the routes are deleted. This results in an error, the workaround is to run it again.
+
+# Development
+
+Currently, I don't have any procedures for this. I personally test on a private repo. I am planning to use the private repo for personal projects, and update both the private and public repo. If anybody is interested, they can consider keep sinan-ozel/iac as a se
+cond origin on their local, just like I do. I will go over PRs.
