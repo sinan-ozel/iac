@@ -53,10 +53,21 @@ jobs:
         run: |
           python scripts/status.py
 
+      - name: Configure git for commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global gpg.format ssh
+          git config --global user.signingkey "$HOME/.ssh/signing_key"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_SIGNING_KEY }}" > ~/.ssh/signing_key
+          chmod 600 ~/.ssh/signing_key
+          git config --global commit.gpgsign true
+
       - name: Commit STATUS.md
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add STATUS.md
-          git commit -m "Update EBS volume status report" || echo "No changes to commit"
+          git commit -m "Update status report" || echo "No changes to commit"
           git push
