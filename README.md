@@ -161,7 +161,6 @@ And also attash two "inline policies" - replace the `...` with your 12-digit acc
 
 # 🏗️ Structure
 
-`manifests/*/common` holds all the Crossplane configuration common to all projects.
-`*` here is the cloud provider. Right now I only have `aws`, the plan is to imclude a second one soon.
-`manifests/*/perproject` holds all of the Crossplane configuration specific to a project. For example, the project can be "such-an-such microservice" or something bigger like a full SaaS product. The point is that it is deployed on a cluster.
-`configs/*/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
+* `manifests/*/common` holds all the Crossplane configuration common to all projects. `*` here is the cloud provider. Right now I only have `aws`, the plan is to imclude a second one soon.
+* `manifests/*/perproject` holds all of the Crossplane configuration specific to a project. For example, the project can be "such-an-such microservice" or something bigger like a full SaaS product. The point is that it is deployed on a cluster.
+* `configs/*/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
