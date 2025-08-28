@@ -3,7 +3,7 @@
 This repo provisions and tears down up a Kubernetes cluster on AWS using GitHub actions. The plan is to extend it to other providers.
 
 It is based on the following philosophy:
-> 💡 If the enviroment goes away completely, it should not take more than a few hours to recover from catasrophic failure.
+> 💡 If the enviroment goes away completely, it should not take more than minutes to recover from catasrophic failure.
 
 The provisionining happens through a mixture of Python scripts, Crossplane manifests, environment files. They are all orchestrated through a GitHub Actions workflow.
 
