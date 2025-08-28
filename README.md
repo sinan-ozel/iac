@@ -77,7 +77,9 @@ You can start by cloning the repo, entering AWS secrets, creating the required r
 
 
 `01. Volume` is for persistent block storages. It uses only Python scripts to backup, restore or create new volumes. I am using this functionality to save and recover notebooks.
+
 `01. Bucket` is for buckets, but is still in development - I may come back to this only if I test HDFS.
+
 `02. Cluster` is for provisioning the Kubernetes cluster. I plan to create multiple reusable clusters for various purposes, such as different Jupyter notebooks environments with tools attached, specific environments for streaming data testing, and at least one environment for personal servers.
 
 ## ☁️ AWS
