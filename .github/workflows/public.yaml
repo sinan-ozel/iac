@@ -1,0 +1,12 @@
+name: Block forbidden files
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          if git ls-files | grep -q '^STATUS.md$'; then
+            echo "Forbidden file found: STATUS.md"
+            exit 1
+          fi
