@@ -127,6 +127,12 @@ jobs:
         run: |
           pulumi up --yes --non-interactive
 
+      - name: Teardown Load Balancer
+        if: ${{ inputs.action == 'teardown' && inputs.provider == 'aws' }}
+        run: |
+          python scripts/${{ inputs.provider }}/cluster/teardown_load_balancer.py
+
+
       - name: Pulumi Teardown
         id: teardown
         if: ${{ inputs.action == 'teardown' }}
