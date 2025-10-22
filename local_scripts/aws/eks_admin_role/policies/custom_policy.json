@@ -1,0 +1,21 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"eks:DescribeCluster",
+				"eks:ListClusters"
+			],
+			"Resource": "arn:aws:eks:ca-central-1:${ACCOUNT_ID}:cluster/${CLUSTER_NAME}*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+                "eks:DescribeNodegroup",
+                "eks:ListNodegroups"
+			],
+			"Resource": "arn:aws:eks:ca-central-1:${ACCOUNT_ID}:nodegroup/${CLUSTER_NAME}*"
+		}
+	]
+}

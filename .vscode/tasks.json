@@ -1,0 +1,82 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build EKS Admin Role Docker Image",
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"build",
+				"-t",
+				"eks-admin-role:latest",
+				"${workspaceFolder}/local_scripts/aws/eks_admin_role"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [],
+			"hide": true
+		},
+		{
+			"label": "Create EKS Admin Role",
+			"dependsOn": ["Build EKS Admin Role Docker Image"],
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"run",
+				"--rm",
+				"--env-file",
+				"${workspaceFolder}/.env",
+				"-v",
+				"${workspaceFolder}/local_scripts/aws/eks_admin_role:/app",
+				"-v",
+				"${env:HOME}/secrets/.aws:/root/.aws:ro",
+				"eks-admin-role:latest",
+				"create_eks_admin_role.py",
+				"--cluster-name",
+				"${input:eksCluster}",
+				"--repo-name",
+				"${input:eksRepo}"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Cleanup EKS Admin Role",
+			"dependsOn": ["Build EKS Admin Role Docker Image"],
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"run",
+				"--rm",
+				"--env-file",
+				"${workspaceFolder}/.env",
+				"-v",
+				"${workspaceFolder}/local_scripts/aws/eks_admin_role:/app",
+				"-v",
+				"${env:HOME}/secrets/.aws:/root/.aws:ro",
+				"eks-admin-role:latest",
+				"cleanup_eks_admin_role.py",
+				"--cluster-name",
+				"${input:eksCluster}",
+				"--repo-name",
+				"${input:eksRepo}"
+			],
+			"problemMatcher": []
+		}
+	],
+  "inputs": [
+		{
+			"id": "eksCluster",
+			"type": "pickString",
+			"description": "Enter the EKS cluster name",
+			"options": ["hello-k8s"]
+		},
+		{
+			"id": "eksRepo",
+			"type": "pickString",
+			"description": "Enter the GitHub repo name",
+			"options": ["jupyterlab-on-kubernetes"]
+		}
+	]
+}
