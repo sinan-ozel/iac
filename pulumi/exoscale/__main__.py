@@ -50,7 +50,15 @@ if GPU_NODE_COUNT:
         }]
     )
 
-pulumi.export("endpoint", cluster.endpoint)
+sks_kubeconfig = exoscale.SksKubeconfig("kubeconfig",
+    cluster_id=cluster.id,
+    groups=["system:masters"],
+    user="admin",
+    zone=REGION,
+    early_renewal_seconds=0,
+    ttl_seconds=0)
 
-# # Export kubeconfig
-# pulumi.export("kubeconfig", cluster.kubeconfig)
+pulumi.export("kubeconfig", sks_kubeconfig.kubeconfig)
+pulumi.export("region", REGION)
+pulumi.export("cluster_name", cluster.name)
+

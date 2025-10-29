@@ -1,0 +1,4 @@
+Pulumi.*.yaml.backup
+__pycache__/
+.env
+.DS_Store

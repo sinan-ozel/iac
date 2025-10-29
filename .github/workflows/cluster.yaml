@@ -17,6 +17,7 @@ on:
         type: choice
         options:
           - hello-k8s-ca-central-1.env
+          - hello-k8s-ch-gva-2.env
           - kubyterlab-llm-ca-central-1.env
           - personal-cloud-ch-gva-2.env
 
@@ -127,11 +128,11 @@ jobs:
         run: |
           pulumi up --yes --non-interactive
 
-      - name: Teardown Load Balancer
+      # The following step is necessary because we install load balancers through helm charts, so Pulumi cannot handle them.
+      - name: Teardown IGW
         if: ${{ inputs.action == 'teardown' && inputs.provider == 'aws' }}
         run: |
           python scripts/${{ inputs.provider }}/cluster/teardown_load_balancer.py
-
 
       - name: Pulumi Teardown
         id: teardown
@@ -156,7 +157,7 @@ jobs:
         if: steps.provision.conclusion == 'success'
         working-directory: pulumi/${{ inputs.provider }}
         run: |
-          pulumi stack output --json > ${{ env.CLUSTER_NAME}}.json
+          pulumi stack output --show-secrets --json > ${{ env.CLUSTER_NAME}}.json
 
       - name: Upload Pulumi outputs artifact
         if: steps.provision.conclusion == 'success'
@@ -198,6 +199,6 @@ jobs:
           kubectl --kubeconfig=kubeconfig.yaml get pods --all-namespaces
 
       - name: Tag subnets
-        if: steps.provision.conclusion == 'success'
+        if: steps.provision.conclusion == 'success' && github.event.inputs.provider == 'aws'
         run: |
           python scripts/aws/cluster/tag_subnets.py pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json

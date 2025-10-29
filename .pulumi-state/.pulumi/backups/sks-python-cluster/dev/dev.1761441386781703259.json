@@ -1,0 +1,393 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/sks-python-cluster/dev",
+        "latest": {
+            "manifest": {
+                "time": "2025-10-26T01:16:26.765903295Z",
+                "magic": "f415235851c84a9e7a4e0a681c656397e9a77db2af82cf68da1db8846c339524",
+                "version": "v3.198.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:JdouUTIQe3M=:v1:ELSZMzyWerMIWX0l://LZ/+D/0cpp3bG5S4S+AFXTGFhIIw=="
+                }
+            },
+            "resources": [
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "cluster_name": "hello-k8s-cluster",
+                        "kubeconfig": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:tJ1lHeez0nO8beYB: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"
+                        },
+                        "region": "ch-gva-2"
+                    },
+                    "created": "2025-10-25T21:54:57.765721792Z",
+                    "modified": "2025-10-25T21:54:57.765721792Z",
+                    "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale",
+                    "custom": true,
+                    "id": "8b4f11bd-adad-4da7-b035-265ee07d6e73",
+                    "type": "pulumi:providers:exoscale",
+                    "inputs": {
+                        "__internal": {
+                            "pluginDownloadURL": "github://api.github.com/pulumiverse/pulumi-exoscale"
+                        },
+                        "key": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:TflfFi6mpy9Vv3OX:JRTPIjm2G8ygJLSgFe9CxfDafKxKbizt6YWmUZ9ChEWkJUW2YOm9xHOSVS7r"
+                        },
+                        "secret": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:0RyzkUeg2jfvQRhC:+z4zA4OLGtrOuGD7YZOIh1mORABxogw9Z5E0ipsjmvTWmonuoP0oVL8R6UFH+acoQJ6I3T1VOONRYmhRWg=="
+                        },
+                        "version": "0.59.2"
+                    },
+                    "outputs": {
+                        "key": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:vdDjBVNVg1u0qSWD:A7QYeoSumWlCcBYR5FVigk8DZifN9qPiuPKMqfpt6mhqIUNnuwkessYjrNj7"
+                        },
+                        "secret": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:TW5xCRJdSEXLtl0f:bnMwSdFDbonbfIOPBmGoxzqedvRSMITzG/oICd828eIVwiYvG1BUI61l4ZWt5uDqLDZn6o9Z+YdeZz2Ytg=="
+                        },
+                        "version": "0.59.2"
+                    },
+                    "created": "2025-10-25T21:54:57.863506209Z",
+                    "modified": "2025-10-25T21:54:57.863506209Z"
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster",
+                    "custom": true,
+                    "id": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                    "type": "exoscale:index/sksCluster:SksCluster",
+                    "inputs": {
+                        "__defaults": [
+                            "cni",
+                            "exoscaleCcm",
+                            "exoscaleCsi",
+                            "metricsServer",
+                            "serviceLevel"
+                        ],
+                        "cni": "calico",
+                        "exoscaleCcm": true,
+                        "exoscaleCsi": false,
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "metricsServer": true,
+                        "name": "hello-k8s-cluster",
+                        "serviceLevel": "pro",
+                        "zone": "ch-gva-2"
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":300000000000,\"delete\":300000000000,\"read\":300000000000,\"update\":300000000000}}",
+                        "addons": [
+                            "metrics-server",
+                            "exoscale-cloud-controller"
+                        ],
+                        "aggregationCa": "-----BEGIN CERTIFICATE-----\nMIIGADCCA+igAwIBAgIUVyWLfsGlLHQ9TYXDXdbaNX5wITMwDQYJKoZIhvcNAQEL\nBQAwVjELMAkGA1UEBhMCQ0gxDTALBgNVBAcMBEdWQTIxETAPBgNVBAoMCEV4b3Nj\nYWxlMQwwCgYDVQQLDANTS1MxFzAVBgNVBAMMDmFnZ3JlZ2F0aW9uLWNhMCAXDTI1\nMTAyNTIxNTUwM1oYDzIwNzUxMDEzMjE1NTA4WjBWMQswCQYDVQQGEwJDSDENMAsG\nA1UEBwwER1ZBMjERMA8GA1UECgwIRXhvc2NhbGUxDDAKBgNVBAsMA1NLUzEXMBUG\nA1UEAwwOYWdncmVnYXRpb24tY2EwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK\nAoICAQCa8LagZsGIX9GLCQX+hZTuv6dyUdZ+0zqHkitA5hTuHzniSJtaUntnnH7K\nvlsPLiE9Q2b1rE4l7w32uv0cDfTJE825KgLGiT3CkeXUqeAd2ar5zdYQ4tWJrJka\nhaMdhONjUjrsK7H3VdT97k+hA7PvJjz2Gi3jcfEuPE2LdmrwmWEqmp2BaweSnb3D\nJd05eE8tHilq6shmv57yg662EZpdbnERhFJh8R/b1CsTROkBdi5tAwxv7qhteGMC\nkblr9rEevRrNOrqsvGtKzohKCTmT0NF3086ciH223qprZU4/PfupLrfAKPtF29wZ\nMK5y5+qTDlrUGdMgtw+S5i3ZX3j3//b7eWtQvzIISCPKGCZSjj8dRH67yeP6Xbj1\nD3YFH5LQr+RE4s+l3SKTnQQ8TV4R7+kax03BWl00Sf1hhmat1YBhmCZekvRScoPq\nNVs6JtjjZtTwz1vgu//aL8PkQObQMSD3sIBhDl3vTAALbLtjptAkIJmuLhHbjnBg\natRE35+wvAZVrVPcO8n+bbRZHms2QRUZIL+F2E+E9dCxQIG9CqQoiHFmpqklLbXQ\nxOEJL0/GkxN2PXfvxSVtansTidLVaWobu1D9LddkIKZ9bJPSD+j44kosye3S/VLJ\n79HxeU0zXq8yMIoFiabfir8A17ijFzgEpudsc6R7TdbSUF6gRQIDAQABo4HDMIHA\nMHsGA1UdIwR0MHKhWqRYMFYxCzAJBgNVBAYTAkNIMQ0wCwYDVQQHDARHVkEyMREw\nDwYDVQQKDAhFeG9zY2FsZTEMMAoGA1UECwwDU0tTMRcwFQYDVQQDDA5hZ2dyZWdh\ndGlvbi1jYYIUVyWLfsGlLHQ9TYXDXdbaNX5wITMwHQYDVR0OBBYEFI4Of2lwrebQ\nTwd5hNFuCUcZKecyMBIGA1UdEwEB/wQIMAYBAf8CAQAwDgYDVR0PAQH/BAQDAgEG\nMA0GCSqGSIb3DQEBCwUAA4ICAQAyg13lecWMrO2DRGsXKCntVlZ5DKnYg9d0/kJ+\nFNaBlL/JAgVnWRPPsHMSY7hBIDOd0F3Sh43Zn6L6SyvVycd+HUkIIyIHDuAnUyzV\nRxrjeQ1jpOzjQT8iFe6/0ibAjUmSeK+sedzElgwChHM24nZUWc08SwVr6OOaa2Ag\nj6NQSsxb8hxu16ZZWRiO/sgYvsfbWNdPyPySlTA7uNCBWVUol30dzQlqnmYKmgzp\n7nScTZin32iIRnX24MGy6HOBcGhHLO55OpnSKT8UTU7ISmZl134AHDyG/9EIUpDq\nz85oPwiCobH75XYk5zS4X6nF57Mp+CS4s9nTAoeZyymZlAGj6LB3LZ+02TCRdpxW\n55jsHkdyaKUGaJ7za1d9AI7wByQv4jZ3sYolb4mMkUcYHNkZnVMgHcKKJR2Y+k5o\nPbm2LTrrGDKaTvbT+jPpeBP0MWqx3NiSD2wiQUz0i0G4jllpDf/1GdVIVAp9LkEa\nFKXwzAW443M6aOmstb/CytUj39XcS0IGXQlonRlQc9KK1AhnG5jslaw65cwZxhnT\nUV8MYjYgG4/RuJx0JCt/tS5OLV+iAL7oEhBS4kzQX3I5tKjNIpe35kvECREl5AE5\n4Xjx7xBy44vo4uXTONRrIs9+9k8SbDn72KUjx6AJ1Brf4IJp/3q9V3O4ttseEuDa\nCW3oRA==\n-----END CERTIFICATE-----\n",
+                        "autoUpgrade": false,
+                        "cni": "calico",
+                        "controlPlaneCa": "-----BEGIN CERTIFICATE-----\n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\n3mv3x7lrW7KoTw==\n-----END CERTIFICATE-----\n",
+                        "createdAt": "2025-10-25 21:54:59 +0000 UTC",
+                        "description": "",
+                        "endpoint": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5.sks-ch-gva-2.exo.io",
+                        "exoscaleCcm": true,
+                        "exoscaleCsi": false,
+                        "id": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                        "kubeletCa": "-----BEGIN CERTIFICATE-----\n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\n-----END CERTIFICATE-----\n",
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "metricsServer": true,
+                        "name": "hello-k8s-cluster",
+                        "nodepools": [],
+                        "serviceLevel": "pro",
+                        "state": "running",
+                        "version": "1.34.1",
+                        "zone": "ch-gva-2"
+                    },
+                    "parent": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "provider": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale::8b4f11bd-adad-4da7-b035-265ee07d6e73",
+                    "propertyDependencies": {
+                        "labels": [],
+                        "name": [],
+                        "zone": []
+                    },
+                    "created": "2025-10-25T21:56:06.975869594Z",
+                    "modified": "2025-10-25T21:56:06.975869594Z",
+                    "sourcePosition": "project:///__main__.py#16",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///__main__.py#16"
+                        },
+                        {},
+                        {},
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#188"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#207"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksKubeconfig:SksKubeconfig::kubeconfig",
+                    "custom": true,
+                    "id": "311267587905733055195832245431582433569052720434:601265603233297898882837581698200151626720987072",
+                    "type": "exoscale:index/sksKubeconfig:SksKubeconfig",
+                    "inputs": {
+                        "__defaults": [],
+                        "clusterId": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                        "earlyRenewalSeconds": 0,
+                        "groups": [
+                            "system:masters"
+                        ],
+                        "ttlSeconds": 0,
+                        "user": "admin",
+                        "zone": "ch-gva-2"
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":300000000000,\"delete\":300000000000,\"read\":300000000000,\"update\":300000000000}}",
+                        "clusterId": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                        "earlyRenewalSeconds": 0,
+                        "groups": [
+                            "system:masters"
+                        ],
+                        "id": "311267587905733055195832245431582433569052720434:601265603233297898882837581698200151626720987072",
+                        "kubeconfig": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:nNxvk2duhKtY91+O:76PcgHmsferH/daQWLR7KSJbKZAmApm6UsEP+0wISC29ZWgA5yxgVIP6CchTlnsdqa9nc0UfK5dgU7zE2PorZXSlwjK7VQ9ZX0BojIaZ1ZVIoIDyjehrNKswCc/7WTuEsoDkNkULWxenXmEJ+5JKUNuTzNS9K/bY+/09wqo8A1TweHqnVb1cRNTUN3LjJOM5onxkH91/WryOQNcckCwQnoCbVubP3z4tGKaFBZGvypaHagOwCnIMfQ2nCD6bNY6uekx6nl9KuXpDG8o7HNXV9vojyo3sV2oJkuxWujl/hnQtvH9KtFfQCeO9Pmr6vvWMsBcBBkDrd1JnYIXaZKK5JomecXYvWgfVOAItdofpIIRuLwU8QwzVeYX3RbSDj5W/7QJH+z50Hj4wq2EwQCSWD6++zvwCAw5574VSOg9qF36mp7RgYRcL1rZ7A71EXL0aMgdWLAsU5hLmbKCpbbwtWHZNabNu92kz4i/FTp+vZSafc3KRBdG4ssmjbH9zo9h201ayCUSi82jaaA95b5h0g/orge7cWDmIOY/TTHXWzuERbGdWmWxzB1n/KrO5eFw4td6OWIoFlkKbm8306UtY8MKOKlPzpWnwHbRgj3YXfq4Bcz4KBgoWPJ8a2XXQrFERdRrP2UQxd+FIMnbZbhsXU1VHuzX+phhgAe6pwfmVe8dQDLEcczYbQUye/lVnoYvCUajpT6THW2ALTzKyzKv7MTiEYNoFFIWSEuoImHRIjngMZvtwuABKihwZiEbPPn3A9ehZuYb/3519fxxDUmeJE4DtQuQHxz2diVxT/X0R3y/WJd9liyGcj/fsAFyRzpqdlqUbEAnz2eYd/pw9N4ZWMuEbMuOkqmAmw2NHz+8TO+O6/bmbNI6BTuZ+rknEPqjEp4CoHSCocmZFjPiqeAWkCUDWj7+zw4mLxtvKd3yhYRJcNlK6SUfq7fFPKkZBeKyuc3kPBSk19yoVuZT34Dv15b6f+0HkTUNdXzHORglIbYfAdmaQtTTHw52KMVNfw8XfCwx6f0/xj0oion8STfXyZNmqShepZ5bGFIlOE61LuPKmuyoscJkZLuIxPDYFLI2xw3C8gvQtZ5xVSlbZVtsZXJDR4r4Pxkf9yjPP8PQN6CdKk1O0YZw/+DECS7Zser3a0h3+Y/EFHlzE+LTpc+8v7olgbDPeLWrImjVMkIj4XmTLxaFGkvRNU4YPF9ajknFeWsU6BHMpfc8kQBrr33ugwWPZ+ZyjfV21ywaa6APNF9Z0R+MQycf2tfWK9A/Y4RnZhBq6yrR2GnrM88FxuRX62neCOmQAiRxy1LnhlkGarSumfdEQt5vN+g1XK9myiTUSo4/vxYOreFktxiXGXG2pt3m1FVH2o6dx/S+O5aWNVZhnVll10gTYIGOaAKuWXXmq1nYV20hlKzuHhi57HluZNh882C4MQ+UiY47Z7mC1zULVY7iRr3YzTzVrvjSBX6eQ+CcbypZmiiG6HkTrCJu7J2p8w6CU+AdIaIlAyR353gYJU58qhckoaJXGxxTQBRx8QGBYP4/ovP1iyFq0RrT4+rKrRuFCfu/X2vS4rNY1yBtLxfMs9A128UeXDb2dSP37hoq38aKU/BhBWyP/o4mW1ioGfmZHOKBNYWFnTxRlTW6lFb0FeDV99CEb4d6WcoTLPrnuwKJEtqtA5hzcOXprKUGr5t+3/xVv6hurDdzLVg/6lohteoGYbPKmUGqhXomCYqwMj1PagdRYAplHG59jihXMVVoWLurZY5iog/89iKz3Lqb9KjmW3iW0eJTc43g/kp/J8k6OrDR1FMXV0OjomNhcuhjxAGH+drRdCBR5EWG8yLZMY48ivIbgxlQSafzxz4h40kRDHKheGvr9WgFbMB7Z7EMYMj8ABLF32C5Wa8ClEG7R6D61vX7cpXUptIgQIAsSjHokL2+X7RPQoZSEwtjALHFrCqLRI2P471pLex/Uth9Mj0j7S0mjcs+58LftFi+EUIXz41nGaKSkHz569qtXklZuSKXg1FoYpplsZxr9TnHrsGpYPDAWuDwS8yc1gvSDBhdQLKDFTbzkD6EOsDSIt7F3DPNB8UWPLbVKDQKMq8PPSn8uGszRt5LUGpDE8kQDv38W5DPg2f+j6IjblSHy8tKVOxq3CQBYydWPFN2BZMFIsLVVd5Vqdvdox8Zq2zntFNshNjJBpNpifGc6aIjAri1KLMOeITyUK+5LorepmrWWUPCiEdfaPbV7jBmPBcGRh1XrR3j1IiXoI4h2zL/LBtXeIJWL08XwZ7ifMy6O2pPNmmGBzxKxhmIQAhaMyIl5SwGjLBb+/s8FpaLyLZApfj54hpt7HpUl0CQVBv7ELhJwXH9CEBNFJt002RxNpVe87CsR0DL+yB15RNDgxsJu+cmPEZiVODVs+AoVK8O2oriMmfQvVTlkLiYNMD2nFl/AW0s2LO0UcHpxzYFcdiyYzCD9tDjoATt9l7RQnUTmBguAcDFYytZpHX2gjSpvjJ2ekyQfrGzFkhHJwGhuz4C6954N+FsxyEMGphLgt2ivbpZvtmGOSSd4JuE9AtSb1wcQweTGuriHVRP4nM4kPcmnY9w+t7Q7F/6FAsmk+aDLAhGGm82Y85XRSmdU/+agFrfS1z89m+Eb1odnTeDP7Y9L07ABwGWn/qWP1IngEh91dpIwqhWw7QYLWabKlR1vgFqoCiNjvKjr3rINpd3lfX1VmMJLgCWn5M9gIghSXxrZc1iCl0tMk1r0NV48JaBTObvevYXvZHgmV6thQFgfPruV+HlPUbIGzOKWwKeBJNAGIc1SfNrUppyiVN8doNuh9tSYkqOkxJdI8At3POGFf2rUzfcnhcLq6aCs8syIfth+IXOmNf6TzVi11ROULzTVRR0S1KehhmevtLSmv0puzKkthk0v8diYZyUlbrdovoTMQYBy0bzMR02jhk5Dchje8RZPe29S3sI84FR00X1wAIj9M4iSqJLK74Z4WO5CR5694rmXMayQ1Dianlp0YIXoddAkYkrFucTe/FLOWC48hxd0YQc+5q+gfjV6e24GsMlZRbK0QIPcE1hWUh+ArcmGkS1jW9MHeYg1Mrhrk/kmxmYBGrahWPqZEyaLcQTaXsxg5WltIo1ekDreyoxlUhYxQ5ekMUUr8mJCcEzjEpmNbxIIq7BCHNZapTjWNsWTUmKWTaFyIl4OisJDds/RNAnsd17UCBuJzrLD7Mka4dF50PacmGb0COZcfJjbMFGlLtLFLo/e2EmYNzy7MXfogL/UfiR4ykepy6MQLACrI162kIP5KusiMQx7rUciOTHNyZRHBCjidC4ZbPULp86TmlfUXpPIJa8LkbgqvDwDdTvia6hvuYhuQWT+pgOjbHVASXTevnR4SLfk1WXZonSAXeM9YPlWiQsZSETkwI9Dr0VAD0nij9jhZZtXFpeFgSG3slSpHiT0xqI/ixfY5k4nzWRPwTPHZzQleFCcm/m846vMTyAHmt+su/XjK1VKYZvrd0rs3k0TLlAPyAQa4JqGmvEnOcr/iXV0qQ8d/tnn5Vu6dLBzBHx+1Kl50DFDjtz3IcgDaQDOh4ZwsuAqtwA4qEgJG9zvOz81nY12bp1YbWHxtwxpsC5phFQqQ1gs59rTRGWdqSLau6+YzXpDe+igSyJ/uD4qvRxQD20gsWP9K/qZDQaj2dhWyCpKNvrYDNg2GREMelTqrtk9ZRbvBAQy/HQoBDW13mgfZa6NeY8ysXIcCnYBKSL+lsyRzG3xRsg7hwk5CcrypKVXhS26/bRM7E+lyXhBkB0M8YufzkLwVAkUJvtue2SJ9FInqCgL5J4oh647da58yuwCSiddQsVTUzzPCtVdo80wfOU1mjppC9ZSvfg2RLI5G/YJm2UtY6XjvTVH3cRCOZWFGwBv8V5qxC1kRtq1YFzHspZNZTvl+Ph+MaIdKNhQVOLe3LHQrs5ehhnc8bfjGMmhREqx0iWWG3nauAOAIBn3q5G8IJpmMwDRr+MzL5Mvh2c1k+oJV6dw6oIGVA1JU1w6tCTkcM1hAfTI8Yjwczv2SAj1NNDr5n+kU56TzEtJsgwkKUzRmSnyuU5HSLAvByYS5sKPOYHswAF8eRjVWcLQvr+nIvw1DmCQn4Bu5+s3BtcxUEnbyaMj4m6K4zUjkgqBYuXMxiuK9U0HwYMKTJKGXKGjhI6+tTlTzsQlN65M8LHlne5jfm1PEOdgplAjrxip6Uhthygsfi1Ijrl+3pMHWsLCo40wdO2Dri8YRwLFvuTFlH8UO0sY8kX66KsiQXXenaMfXLMtmV+sdEYb0xVf7fZBrlXD0gd0NaII7LO86zcTI1NtN3c3xaNBLQIt86LkF8Xy00W/cgwOikFqSr0p7lbuLn8USn+WC9vQgknXOBuDQB0H5ccAOyQhjwY4V0TIGXg502kS8AjQZkwtrNZkhor81p+C3dTZJooidRlkN6Kc4F5qKeIQyCTVZd4bMYkdpiahCfAgr0sTEth6xgRJCquUxjIb2dQFTj5NcCsDdN39jxd4IGyEWoxR8txXHLGFZN+MECSrIn4S/kCsBubRMQMQGDwY8HkRaykuS8u9mFthd49Gwpcq3/qFphQb8423tPu9/rU2GbWnNkYYB+ftISFWtwNEFrh8wZmtwdwtcsexSDermI+6VPXSnUVfH/SZ84+b/uJqUGsX9aiUs5ShEalgmxSGPh7buX+RoZFjTV92H3Et8tncgiu1ncpLEqAa5E84i6IeclUr9MTFtilw+cEw1MATpEsT7bVNdDz5rdn6wzToX1hxwJa6q6CgKQg3Am3p2ugAxbrVK2fQsQLK1lV8zfkDrppc+Hx0l/quY8UMVgOzFqheZPp2F1a3XeF5x7v3/xBVIBKoqCsWwm8NOjMoA8wVZL70fafuObxwXTVhPFwjTE0XsAMVdsLiQ+lQQ0Oq9mBPaMW0xJI6KNmyZL6UtKrrChiGW9kIlsXBn8+o3mRt5ccFHdLh2iuyTEaeYyWQDN+kcJK7ixdJu0HLwnst+5smHfCWKQSdkFHXY1oZd9R4p2RGWeVs8+/rQldsdUtR/7N06ATtQUu2QppZncqdMjnL7GJyo6i7FtBVeVU2WKYi144IsNceQOL64j+WRCPQKV0MYLHWjqEPC3zpJrJvH4Nujj1z3eD4gzvyqKz8SeVW1F2cTC2dH29ftlSXNcVGhAN+7BTHj2GMUcFKNDGcU20oFR7BEhC0+Yca44zp5iL8rvQNeoQPXkyON6CkjXLfNzLj66hsGkCZB+QMnLZcFWknl57/XOkRDjj+zcL6APLujdGEMDCODcov+fEbMglTXBAqs+HuoRw5IxQNfSajEAN8vqla3nUUJx/b5YEq944RlShvbNyGfSO/2VM0diDO+AEq86oSSzBaKxIPJHlGzC+xek/xUEnYCadHgM/pcPaf8dTQYJq8tqO5PSe4HzqHh/29OJa0LzOpsf8mvoyPanDw1e79T40/Mw17BVkeM4bGbhOCjsIUV0miAOhK84rKBmJBbEJdi4hqnnGEpIWsHG/of8ceR9LvPvF48Wo188vPMrP2Rra9THgOEoVtOxtjDDVXgCfjQvDT23CUNqMwyCtQMfZnyh2UdZECihcW9RB1Ls0+erZs3GTJ+Sq8t9CqoWqQkArYiusAmM9qV4FgFqsWRaTqrOFkM4pgG0gBFSuWtBBzIGdvdJ1Qp5oDmYVwAGY2sTGEjQ8IA4OTNRVhn/AX/0NeDpzJkoQy7J7ipfDIvHR6BAnyBogXBqEDrrbGNnU+BiF0vSrIOa5hQeKsuJH1TIYw08nnQe6X8sPReBuhR84+85nrYPViY5dtEU5Iz5ak1O/L9kk6cTY6lS9+naC2P9AL1sL3RXkbPr6A+jgxXe1ZLos5k6A7ysLZOSn8EtuhuYAS7g+LBVSYHujeTkym0WnXrBhfEMnQVcWGlOPyBZCGQ4ODQxkKz/pXU2o2ggpcgqRn0KZkQJa3ceKUt0uelYZJ5x2SwGuZpWjTUDm2J1E1YtvqqfGetMpoMiEeEbZghl1+L9TwL4b7nJH2A9KPv1/8pl55oOYdu5Jr5BTjtIPXhokcRu0/3LAB7oWLxnoxXjYYytVUPHsy95OBfnBUFtN90j5BqGcO0v6XTuxsBmRl3DVnHkwLHSqCB4Uv9wiQUsMWI2nqASwocyKARLVEFVKnOpmyROTWbbPkJc044KNVJxHblKS876xP0d19i/2pTjsa4/XKcYmP24hbJ1SZ2Qxeppm/7Aj9lcHPuee0r02y/2Rces9+266/EC8ISfHwB2zbWk9V+lFPDZCRTUlQ8dzVfHUAofsJqS47o6Ikog81I3Qo5444iJJVMpJjlIAiCAcGFOUsRlsQiMdHVynpuH7u61uOYENpkrXt95FIdlUk9AfJIan7fvREiSaQhkpliTmwihN5UhMzn0emd+i4lvl39UjtWhIQfkCNEslkKDgCl8n6AYaJAKb/cm18FDo7nCvsDA9EI2JY8z3ExEpthRJ9Hu7/J8OKywJ82EklO+z2S5pautc/ZjY02Om48Y4vAnnG4jNI8WDqWqoIXNr5nBZMyXyPmiXUyyBRy4Bst4prhhjUlBmrwBJKJ7lpK04GiZppBI5VpsNqbFq+PjgqvbU3EAd2rsVWRHZBCG6mhXu1gOT9/0PvDSXBy1f6CQcgQzQvhT2o680V9V0pTTt52lGWoLAq0ZJrxD73Xr9p/vh84C/swERUII5on1c5ZVV0QeWPkJWXDczShHcmIt712b8luo2fnm2gd1VYvZOdb7VLAFUsbo7vU1zN9Tgm6hj1NvWrUrZ8u7Qg0lXtRkg/LmQZ/dSLn5u7id5IoYJNiZ8vSerGKND10Ce6gKBhOG946Ce+XS8X5O/0Ns175mo2mdOjdvrZJwRkWT1jwSoWyXowwyBdvwODZSAiPDC3a47rxVZw4pwpfzA8tK7P3Hu+iqDnk6WyH99p2ALSm3dmpyWHg2sn/6onQ5Try/u/rqIu4+GjcyhV/v9g0rc+2EQ4INnsERFd7fcvk6N81CFh8oZABIM8Gx67xddgEjuAJqUHWrTPsFmwmqjFUZH1++1WXZK54TkMPihKajGgwuVFmTG6nO8Ge+sfJ9+HuSHMWaiMJgg9jzzlSh4m5q9UOm+KGb/vVv9QV9b9cgdfIBirq2Xl5lWhjUY+DejYup74x1pREjE1ale+nDhClG1Zr9ieF20k1hIKz80XP8lAwXwkdaIXXolObjipep32Kfck2oOcZCixBXxVrTCx5Samy7jx51ql5rY+t8EAOsu3EDqs7Ytgz0F2XxwLRzfjbnyFPnXEupEOcuRDb8/btuK85RPGIYLntiZ9i1gUCU2/U12qiqm8YPiPUCFf7jcS+yzYQo8ovDP9+C+S+0uuE5cq7rjQ2HPUngNmVnTFfJHf0Q8OhCiHk+P9j/kbtjfJX7mXbZn8r+yDcmTMyn6N3c8fM6LlpAfl57Y/yk+Wc8LWfNAfcuXryyZw25XN5WNp5ZXXTEBfyDcs8J2HERmH57jPzQFoTWZvkrE7UyaHEkrjVNLJGL7/TRvZOl6lL1O0+SoLeCgIbR2xC9aNOwpN5O/TtUJabimvjLo/N6R1DTAmOktgwlpykC9d52K2Wo9YqEhXiS/EE34QixmfOb9wPXQtYhRnG8P/HCHIoSR0/LlXdYrLaK5bErW6rzUrg2gKuZOS8H2v/1CMrMgx9BsB/Rms0SZpeIykGGHt8JYRok+pideBjjudesoQPFV2BYl4mW8kVtakxb0FwkcNQl+M4bIsvQ4PV9bmyO1dBDHlt+XnEx8g0siqAfrw4UKMXCt7u2JL/oqQVv0gnMiPyPgmUpSjsa6cJ6mjpZYvzZkBJIKFZm3y9D4OZZOyXFfYbqoa+8nDtuuNvBX01NKj8nytIlzwrVVY0YKVnUPZSLnQNNK+pHg9JHOvGirH4XDz5m7Z+2Bc3HC3FqKqyZvK9ylARUaMKFULRiWvv7IAoxzKFN217mx419dfUkmzx3IuFsAOrnBR/eks2fRQzdYkc9ltMzezrC88PYJri0xnaLo5ErteTkvx8eTniro7x+X1nnEfxjvS2V9wXJc3ziHJ6uNmK4opvHA+XZSHoKUouub1drqdenYsiM421OOEFhX+K12g/lBhng1WEXSUg6U+tot8antphOE8sadCEoyJginZ1NiH4Wu9KLrYweODrnPFAko1NYybUGdK9odbQ+LKtYEkjqYM/mefsGW7bbhBzpjIGFBtEnpUDNqLb14EqLmNb1Wy3/bXcjsi11eo8wjigJD74nrqORzL5VKyTQ7L//VV6/5lpabdo2QFvWOA89k3VOTZMZD1req63YTMdgmWti2Kpihrtv0Wf0g1+JlYhcgYR0+gKcrvHRtzwIhKIbYydCXLP66bigMDXhbhynRouEA+MkF1WazOvHopuyxDghRR4EHyObq2/7PtPCmfUFgPObKcKlDZ82mgm8rhd0Dp1Z1yR5qFdtjHbtbzsUH+XPw5AATBy3F5ZJy9bAdz0RKW1AwAXWTBtQD19rSyVqRJ5dUejwR4fwz7j5pPrFtFCkQwlcklADg0NWrf3v45sso7O033Zc5+iK/cGDqT8EG1pzvxfmH/xMfDudAMNLuYBc3CbTR+OxQvUvqvro835G6imUK7M1DyXhV54PSfMY2QpkuHTDeu3yBqxRNQAWM6I51E04/0bx9PYQIbA4WS4Tbs7wZA3mV049vCJ5Cs++olCwTfQV3iBGw3+E7B/vrZCHD0k1TtOdKDsJfSL4C4p+V4r2oDwPmPrPRDanXpKwqomEroNPIFgNUtwE9jXn35sa4ydtfrzSN+rwVe4y3OLOcYaLDQ238wqdgidcIs3Z0LRAoi2+jg2qIWzIDZrYU1eTNGAzw+jm1LqvxxqPGH3qjpWuBDnIRRl9aaYwP+itSQymnRaHocTnCMNb8K6kwlEq6PNwEZCLlrjmO7cUQF+4Biq6HbAiVQJA/Zt/3nFyteKWBC2OloxXLC5ak0FvCE/QTghhDePoFhaRDhisHgq8QQBCMQOqxeXAX10Yy1ya/Kh0pbsHR8y5m8QSyPOW1Q67B76B3SQJ9X6LxoKSxkHbHzc7YWW8My4Gn/iXPdYUkjFzCFCQFn0+th8qFPLJTJbsogJUTRcjdCL0s5legtDJRkf949Fy+tVsijdN4bCTBNmjYy69ijFL5EJ03GyLYHFKdfUlj0ziar6qBezPR9aMbxvBLRdY1pw6hOIkUBE7ynlPWDVgzrHlN0EyVKVzUO1jJ/c1ltk3kC+FWJN+KUfBl8hjzSX9fxu2p97EBV3Hu3xzNEIVJiIqHMMQQpDQJ9gvPlvzvcS8eElZ6cH/alscPkdIWvU23SGw2bcBooes6It6i1tiiN+GVNFkbyEnDhFZg6Ql1NuKSKj2EpYey93UKJZq9utRuVEMH7LeKGKr1C/LLkaC/M9oJPbaSheaGcAFDYYN9PJ5d2A9zjcgTSWseSyr/6JotOGDYi8HhZN+3oSdG6jOQly2cvold4nLCKc9r8lW97Pdt7m9sdPXKqA/rFzQXuREh8Gd4gCW6ukjbkpscZJZ2QR/Z/oSU/QVK6OUg7T15TTfwIq9nRZnkHVW6xnC5LuBKv6HNPh1Zqa5BfSic7JSMQVIWQz1tjNqbPbCbQHSDNPANF7pryQkpnSYGX/kUUPES+vYGP3du9QwIqYtQMfXKcgmIPQOgSQXR5Jy3CbXqOhN6ZFex+LUx8PwRLWSE1ch5yB/gCEZGvj2r6py1eyl9sLISHpn12JqoRm4z7BkYvljAimrZs5fwG/M7bZH49HtBElVX55d0S98iNpV1HJqbUQepuToZKK+MExPdNupBAhDgrk8d6P7nNMXzNsC6eaz5N+nP5bFHrsT9L8TYgCowGw3mnmFjI8CsQTp7gpbB+YSNqZ0f22ulL86UJ90rZSjIzL6HuCNmYtjQvAlZgcYec60Nx5HXqsjg/qpPm9XrayKtPOrfwkihCUOJBXjF7ZFlgurRoK+12b30oRdAbD2wY8hyPP7SP2fZ7m40lTOwHOCZq3PWMpzhJviyA1/eHga9TnY92lljCwVGiz/dBU3Qe8ZkwH8UFbhI+Tmxa1gfRU8tfag+jNL1m3+xiETZ7wR2rg2HCGFvLihl6ymjLuJH2wVz8xigN09eLm4wnaq28LUJUyoYMeL2VKqHO8YglZtA2SAiFhQqInNNeaQ/2gM+QDeYuF9CtJAZPK6IW7A06y8cnxOBB3+l/2DrOssGKHphSMPzuojMXCNjqJbaffETGbm4cfaMv+8hVbQ01bnw8ko8IQQ2FSHkcn1tkNI1xVLMS/1sSNegglv1yRn4TxMHiDfPSTFVvfDjSy+TK4i2ItzhxWbVFfS6xJf5rwEuy88MbJFq7kwJ0ncMTORxo1pmpiVNYpTBB83Bvd+mqh9++CsfSYZ7OSEj47AbtZPovon6+kG3QLAuyZEoiCSFojlc+BOl/W5zXqpnAeOHt6BSEmflm35A2LwJBGQdO/PSVz198JScL3iHN9Zu71plirNkwHxfZ+gnxFFGmysTTuu6Q2H/EHZkLf7x/6vfJ13YlOAcxz9qgsCwlgcNisPdZPj8cHJOs9eNHn3dHF2WM47wKOGLwZ8a0+uTK5OuG1FErH2TGUs+apcG3fmMDVaYtuDAUTsK3vr970U+wTMhIVbXoqDC/ITFumyLvVSm2nhFD9QFczlvA3MQAaoXWYBQoxDpqUHHMujcxPobytNWfR/mhWjv5n2qo4K9RJ3uWz2B5x720YocokKXmp0R6T3DvZEqGfgIfMdYY1ZsR4rze1AaD7oT1sNr2b4cBJzIEqM4U7QlaryHb9gyzSwqNIVGfTPC2RmRav+wVkS5w2khBX47hIy3ohfiEeVUmzUrwTNq00/b7zagL6ZuJVND4Qcog+zOZUWbHFPfk2A7yYzeQk3w3QaVb20ngfuuQ3Jp9BWiq89mYBIkOzZphBWos85jXhDb08QX2Woe44hi7jRF6aYrFzeFJA4fErjbrjYbrQHqk9Wi9h61sK5it2kpeE2kV6JFAGqzoIYe4JXy6yYXzsQZ3A2D5QGCTEWHpaZ/8QUJyFFCxkYIIaP91lw/46v37eh5jSsdedqNsgDieNpOZbk8NHh3ekJ/VV5tV0bV0hMxAt/YuohZ7N8j2MeuH/wMw30ba4oJXV0wbMotU5XTZIaJtpHQ4pYlzCakBosE9rB7Q0fy/XW1CzHe0s63AkrKigDPFo9QilMdyj/AcLb9URQYMUm6P0565GIpSd8YAnsCNL6AUd24sKCLgn1va0WLGKytvv2ggBuzGjo67N5Zz96k6lcOrj/UzfGIt78dZIQ16F4MB7+58NyjqhEfXxpNe7Xr4MUv5PwjuRj8M1Bmuo8iq8kk3KX5ZsMlcf8TGKZKJZtXaqE6jrEYmoa5qIHiC3PbPkDb1cxjzEjmrLGrswn7qOWpx0rnuFoBG2nNBibjjl2YdaAnVWmgVtt0JZfYpVrHeZKE4d+THitcTo+KkBm58mINy5dN5uTgcdOgmdNQdp4OoTI4lBhDJa86fHDVh33KanWQwe4XMj67/+ZzZ7iUNLjzYcFuVMz71389loBkwrtybcBQ/ZcvDgbThanZ5/xn1SUuqlSZ26bvaoAHGps8ewPLjpkZ4QP0aRFXyMelhKK9SJC/liDsXSmTYXmdMCAAbswVFsNfs8ZBEHIYNcUIt4SI9F49jRf4fCMGe8HclfKm06ZRtZDaaf9StsPda+l0HH4xwJ9bn9iptsqAj8lbwD9lEf7d3n6HLSCdfgvmVEg01nS07rJhgkPrMaLAa2uDNF906X+LTeV3xjfnmohHy47TNA3ZsQ0FrnOXJMb60ocGzJxX0gWw8fyl2mkyJlvLFOyk4hgJaSitMyDsphastOWtkfs40+OMFITBTbcosXFiJ2lztVz9aNISqmKLDUPycwpxPzrty5SUIwPQ/NLGalQ/g89g306jEc9PKOKMQ0VaUY11gur7sMIjkYJTKUUb+aBu7VpYbPfRWlURzkp7j5+1n5lQm3iIylz1ilqAIRqHq33Cgt4vHJjRXE192xbUpxJblpFBLPkaILFN3P3yWRTxJ7DLsbj52Umn/sZIySiqnGH0fhTEuqkcU2YwzIIOaAixt7rIA641Xeqr5pMHS+Sz5pfMhtwlE4UeV0OjqpPCsrxt5C9t7dXZzaqQ7MMfyYdl0jiDzbMGdid/zzsO89iQqd8bU2zucUZ6eeBu4tMXKtODZ9fdTPY6B/k3XDlLXH5Ttm7A8ACiPHmwwZWvcYA7RDST20tnwc5WR+65UioZoy68A2lPMjjTqYXVMk3GojOJNfwzgEEZyjDWuRJSHbBExTzyj22QbZ27Nl3gHdFaR3QvyeyEuhreZ+GX2sQ3rH6+sUlNedEtq8GLJDgsBz7X+mFvKtjOeicZGROQzrk7BQ2yBilfR+HSpgvqVRZxlWKkzDvux443KMlfh6TQ67SNEwdzq78lJpE5kZc04d0mgXPqpdALQ4wbeaXbSQH5xDAKTSIsvHiHg7Bpt88IqFr4j1zDDK1F9zbnUCx6LJ6jDg9wVSoKuSSCGfu8EbSalT7bl3ktsReuPK/n2IUPrSmQpT72QHozYEpEtRyGYu79sKF1oRhPBUr3G3E7k7/Iq0mc3dOJ1BLeE+BDtH1V/WrIE7OogQ8NUBcmPowKJmMUj/FoLR3pSaJjZbbtZLYWO0CXaaQFjGGKWwpu2PIKe1TmGcTXpJ+DS2ZzkRHgweexUr7MBg0f2JNt2+WE5ILfL0P+c3cGkU+Eeb97nvs+kvv3V5nCVI+/BVOUD1n4bVfec6giWbiGHpvGBLgq1aVSJ+GxGg1h7D/GXCb93Sln2fthMwArSDPBwQnaOaNoJL5Z6e1/VUbCtL0GkJAY36FHEYs3zpIB2jjlucPNmim//Ewoiw0mIeC61m76begzx0ZA4XP21cNJe19Mo9uDeQ4gGNxoWVVU0qDD0fui/lDbUCUV+1QPoLf8IIvpb/Dsq+e5unOzJFtQIUpUgMr/Uhge0h5p8dQL3tmckCUbPnIusxsCd3wMI2jFWL1G7z03Z4lB/QOGcgs4tRL/uw3CHAJ6D8JNTUlcIhQLhnqwWNt3ctDSNdtlPp5BMQlrvDuPV3tyrqBpYsioshMsREWFi5jPKuljTVfI3hAR8c2uTTHE1FSsErAXgSdSdA1KrHrcCEKQLeFQKZ8NSy3yWDQvnHBeTXxCB/9y9LlaR5aECRpfGY+PYKGW2Rd1f37ehTats/uur3sjNtUegu46u8S8uBPGEjdRg/XyKN3cKWH1hztAyeA/71Bk9OnS4KEMw6fWNKXj8EUe0zTw/uHJgiRcchLfTANpSR8QZlzosRC6MO6LDGgXUMx9YKA698ss3C4S/coURO39YYKjpuDjK4oQnqA39mj+vf3tXvA4sPyFmzuTuvT+4iYhk5aywHEkwhd2n+TDs41mCALpaQhpLpNFJ/iQe88+8bXhMdrOQ6MqnWHDEUhhl0owXVRl+UG9A1G6cxPCskzophmkPvyVuxAxgP3slkw6CbD7nYX8Jdyckcusuy3N+rDWavlj30MyvVReV5+mhlQ2tIjNc2ptq02v4g0LSIbT31kvpu/+Sn169mKRCXNurw27FDqUuhuJ5pIOcT37+IC7UEmSy89S5bdG37aOmz4gEp9mWMymV2v909EKISkNfwJqWWHXvj7jnkViagXqG+ZjfWtKLHS0ddjnVasn6IvE6OT3pfEbbTPam/A+HXcBCS2c/vTK6zxDCMUjG+PsRVEPiF5oX1CeusPS5JZm+JkPAAkdn+l8+WwEwx5xf32uUBAa9di4Tp1++6nW+uatRNKM1OmKDG7lr/BtGwkZlTB/hYpEF5MuEPcUQbc7Ky6AkhpP7yPNrJlzjF27F0heTjrm7glbiuW6F+wKKFqhLH7Q3NSzsSGFRmogJ7JDG5OjUqmwZmfJFa7JQZDqIx4aMSV4="
+                        },
+                        "readyForRenewal": false,
+                        "ttlSeconds": 0,
+                        "user": "admin",
+                        "zone": "ch-gva-2"
+                    },
+                    "parent": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "dependencies": [
+                        "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                    ],
+                    "provider": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale::8b4f11bd-adad-4da7-b035-265ee07d6e73",
+                    "propertyDependencies": {
+                        "clusterId": [
+                            "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                        ],
+                        "earlyRenewalSeconds": [],
+                        "groups": [],
+                        "ttlSeconds": [],
+                        "user": [],
+                        "zone": []
+                    },
+                    "additionalSecretOutputs": [
+                        "kubeconfig"
+                    ],
+                    "created": "2025-10-26T01:00:31.62639583Z",
+                    "modified": "2025-10-26T01:00:31.62639583Z",
+                    "sourcePosition": "project:///__main__.py#57",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///__main__.py#57"
+                        },
+                        {},
+                        {},
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#188"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#207"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksNodepool:SksNodepool::hello-k8s-default",
+                    "custom": true,
+                    "id": "5ab92dad-12ca-4091-8145-02118185c5bc",
+                    "type": "exoscale:index/sksNodepool:SksNodepool",
+                    "inputs": {
+                        "__defaults": [
+                            "diskSize",
+                            "instancePrefix",
+                            "name",
+                            "storageLvm"
+                        ],
+                        "clusterId": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                        "diskSize": 50,
+                        "instancePrefix": "pool",
+                        "instanceType": "standard.medium",
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "name": "hello-k8s-default-10c68f5",
+                        "size": 3,
+                        "storageLvm": false,
+                        "zone": "ch-gva-2"
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":300000000000,\"delete\":300000000000,\"read\":300000000000,\"update\":300000000000}}",
+                        "clusterId": "cfff3fc7-c3b3-4039-a4d1-ebbda96646a5",
+                        "createdAt": "2025-10-25 21:56:08 +0000 UTC",
+                        "deployTargetId": "",
+                        "description": "",
+                        "diskSize": 50,
+                        "id": "5ab92dad-12ca-4091-8145-02118185c5bc",
+                        "instancePoolId": "bfd8d7a8-a3f6-4a77-9a5f-d4030282ec00",
+                        "instancePrefix": "pool",
+                        "instanceType": "standard.medium",
+                        "kubeletImageGcs": [],
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "name": "hello-k8s-default-10c68f5",
+                        "size": 3,
+                        "state": "running",
+                        "storageLvm": false,
+                        "templateId": "ba226d0b-8b72-4fd8-b0ed-17fb4e54fb66",
+                        "version": "1.34.1",
+                        "zone": "ch-gva-2"
+                    },
+                    "parent": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "dependencies": [
+                        "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                    ],
+                    "provider": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale::8b4f11bd-adad-4da7-b035-265ee07d6e73",
+                    "propertyDependencies": {
+                        "clusterId": [
+                            "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                        ],
+                        "instanceType": [],
+                        "labels": [],
+                        "size": [],
+                        "zone": [
+                            "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                        ]
+                    },
+                    "created": "2025-10-25T21:56:39.414022069Z",
+                    "modified": "2025-10-25T21:56:39.414022069Z",
+                    "sourcePosition": "project:///__main__.py#25",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///__main__.py#25"
+                        },
+                        {},
+                        {},
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#188"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#207"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                }
+            ],
+            "metadata": {}
+        }
+    }
+}

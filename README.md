@@ -21,6 +21,7 @@ It is based on the following principles:
 
 * Roles and users are created through local scripts (see an example [here](local_scripts/aws/eks_admin_role/)) and VS Code tasks (Just run ''Run Tasks'' and choose ''Create EKS admin role'' to see.). This is intentional, we are not letting this to be done through GitHub.
 * Most of the infrastructure is declared through Pulumi (see here for an [AWS example](pulumi/aws/__main__.py)), configured through `.env` files (see [here](configs/aws/hello-k8s-ca-central-1.env) for an example) and orchestrated through [GitHub actions](.github/workflows/cluster.yaml).
+* Some things have to be done through custom scripts, and these need to repeated for different providers. For instance, I want to take a snapshot before teardown on volumes, and I want to bring it back up from the snashot. These scripts are in the [`scripts/`](scripts/) folder, structured as `scripts/<provider>/<infrastructure>`
 
 
 ## ✨ Features
@@ -270,7 +271,7 @@ Set up the following secrets in the repo:
 
 * `pulumi/*/` holds all the Pulumi configuration for a standard cluster. `*` here is the cloud provider. Right now I only have `aws` and `exoscale`, I might add `azure` and `gcp` in the future.
 * `configs/*/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
-* `scripts/*/cluster` and `scripts/*/volume`: this is where the scripts completely custom to the provider live. The idea is to use Pulumi as much as possible, and then fall back to these scripts whenever necessary. This is because Pulumi is much easier to read.
+* `scripts/*/cluster` and `scripts/*/volume`: this is where the scripts completely custom to the provider live. The idea is to use Pulumi as much as possible, and then fall back to these scripts whenever necessary. This is because Pulumi is much easier to read. In general, the folder structure is `scripts/<provider>/<infrastructure>`.
 
 
 # Known Issues
@@ -278,9 +279,22 @@ None, at the moment.
 
 # Development
 
-Currently, I don't have any procedures for this. I personally test on a private repo. I am planning to use the private repo for personal projects, and update both the private and public repo. If anybody is interested, they can consider keep sinan-ozel/iac as a second origin on their local, just like I do. I will go over PRs.
+When adding a new provider or a new service, default to using Pulumi whenever possible. This makes the code mostly declarative.
+
+When not possible, add or modify a custom script under `scripts/`. You will see that the scripts are organized in the folder structure `scripts/<provider>/<infrastructure>`.
+
+## How to add a new provider
+
+TODO
+
+## How to add a new service
+
+TODO
 
 # TODO: Clean-up
 
 Update:
 * `.github/workflows/public.yaml`, to include `.pulumi-state`
+
+Rename:
+* Put the Pulumi code in a folder called `cluster` to keep it consistent. Update the section "Structure"
