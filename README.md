@@ -292,6 +292,9 @@ If Pulumi is not enough, and you need to write a script to call APIs, etc, put t
 
 Put the required configuration files under `configs`. The purpose is to have different variations of the same cluster, for instance, `dev`, `prod`, or different centres by region. These are meant to have only environmental variables, working as `.env` files. Once again, each cloud provider has its own folder.
 
+Whenever privilege or role-related changes are need (IAM in AWS terminology), do not rely on the workflow.
+Instead, containerize and put into the `local_scripts` folder. (As an example, see the subfolder [local_scripts/aws/eks_admin_role](local_scripts/aws/eks_admin_role)). This ensures that the github role does not require permissions to create or destroy roles, or increase privileges. At the same time, thanks to containerization, multiple team members can create roles.
+
 ## How to add a new service
 
 TODO
