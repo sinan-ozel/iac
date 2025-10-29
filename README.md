@@ -285,7 +285,12 @@ When not possible, add or modify a custom script under `scripts/`. You will see 
 
 ## How to add a new provider
 
-TODO
+If possible, add the provider under `pulumi` folder with a lowercase name for the provider (e.g. `azure` or `gcp`) and add the three Pulumi files `__main__.py`, `Pulumi.yaml` and `requirements.txt`.
+The ideal situation is that everything is done through Pulumi and Python.
+
+If Pulumi is not enough, and you need to write a script to call APIs, etc, put these under `scripts`, with the same format, where the second-level folder is the cloud provider.
+
+Put the required configuration files under `configs`. The purpose is to have different variations of the same cluster, for instance, `dev`, `prod`, or different centres by region. These are meant to have only environmental variables, working as `.env` files. Once again, each cloud provider has its own folder.
 
 ## How to add a new service
 
