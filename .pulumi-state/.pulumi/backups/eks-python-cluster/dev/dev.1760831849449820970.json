@@ -1,0 +1,20 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/eks-python-cluster/dev",
+        "latest": {
+            "manifest": {
+                "time": "2025-10-18T23:57:29.445610074Z",
+                "magic": "09ef7908916e9316cc9b98df3521baba02c1c9e71a54147152b3b7aae932941c",
+                "version": "v3.202.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:mvf2n+aamUk=:v1:Ya5EZv4RuYQQoFLl:05I4thN7r80Gq+VGntxS7sMWv5I+tQ=="
+                }
+            },
+            "metadata": {}
+        }
+    }
+}

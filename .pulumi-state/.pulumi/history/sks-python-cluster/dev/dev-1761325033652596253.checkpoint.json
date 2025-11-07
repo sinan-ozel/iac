@@ -1,0 +1,296 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/sks-python-cluster/dev",
+        "latest": {
+            "manifest": {
+                "time": "2025-10-24T16:57:13.603150614Z",
+                "magic": "f415235851c84a9e7a4e0a681c656397e9a77db2af82cf68da1db8846c339524",
+                "version": "v3.198.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:HMxspCNoys4=:v1:ZOFHGhwFh+CnGiVz:ulEmC5f8Z+5tM6y/uO4vFEcCXwVjWA=="
+                }
+            },
+            "resources": [
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "custom": false,
+                    "type": "pulumi:pulumi:Stack",
+                    "outputs": {
+                        "endpoint": "63ccf9bc-1e01-407a-b228-c27646b48a92.sks-ch-gva-2.exo.io"
+                    },
+                    "created": "2025-10-24T16:55:02.212121072Z",
+                    "modified": "2025-10-24T16:55:02.212121072Z",
+                    "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale",
+                    "custom": true,
+                    "id": "8ab96f6f-bfe1-494b-bec3-9139d24dadf1",
+                    "type": "pulumi:providers:exoscale",
+                    "inputs": {
+                        "__internal": {
+                            "pluginDownloadURL": "github://api.github.com/pulumiverse/pulumi-exoscale"
+                        },
+                        "key": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:0BQtjIM3NUNPtFMp:O8FCByKwmXrNvQQ72vgsOjCBmXxVZmzHqX+BiAYYjgDO2XvwQJpdazqAoJ1O"
+                        },
+                        "secret": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:cjY4sxxwCCx4OqH0:NbnJFHWGL1EDDspc/cEuPoz68iZkQRclqmOiHID5lJisV8+pAcSr2ivT3cOwz/PPStU8ZQIppYvEIOevTw=="
+                        },
+                        "version": "0.59.2"
+                    },
+                    "outputs": {
+                        "key": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:0BQtjIM3NUNPtFMp:O8FCByKwmXrNvQQ72vgsOjCBmXxVZmzHqX+BiAYYjgDO2XvwQJpdazqAoJ1O"
+                        },
+                        "secret": {
+                            "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                            "ciphertext": "v1:cjY4sxxwCCx4OqH0:NbnJFHWGL1EDDspc/cEuPoz68iZkQRclqmOiHID5lJisV8+pAcSr2ivT3cOwz/PPStU8ZQIppYvEIOevTw=="
+                        },
+                        "version": "0.59.2"
+                    },
+                    "created": "2025-10-24T16:55:02.310910438Z",
+                    "modified": "2025-10-24T16:55:02.310910438Z"
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster",
+                    "custom": true,
+                    "id": "63ccf9bc-1e01-407a-b228-c27646b48a92",
+                    "type": "exoscale:index/sksCluster:SksCluster",
+                    "inputs": {
+                        "__defaults": [
+                            "cni",
+                            "exoscaleCcm",
+                            "exoscaleCsi",
+                            "metricsServer",
+                            "serviceLevel"
+                        ],
+                        "cni": "calico",
+                        "exoscaleCcm": true,
+                        "exoscaleCsi": false,
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "metricsServer": true,
+                        "name": "hello-k8s-cluster",
+                        "serviceLevel": "pro",
+                        "zone": "ch-gva-2"
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":300000000000,\"delete\":300000000000,\"read\":300000000000,\"update\":300000000000}}",
+                        "addons": [
+                            "metrics-server",
+                            "exoscale-cloud-controller"
+                        ],
+                        "aggregationCa": "-----BEGIN CERTIFICATE-----\n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\ncp0twQ==\n-----END CERTIFICATE-----\n",
+                        "autoUpgrade": false,
+                        "cni": "calico",
+                        "controlPlaneCa": "-----BEGIN CERTIFICATE-----\n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\noQJUYICq1+oJ8w==\n-----END CERTIFICATE-----\n",
+                        "createdAt": "2025-10-24 16:55:04 +0000 UTC",
+                        "description": "",
+                        "endpoint": "63ccf9bc-1e01-407a-b228-c27646b48a92.sks-ch-gva-2.exo.io",
+                        "exoscaleCcm": true,
+                        "exoscaleCsi": false,
+                        "id": "63ccf9bc-1e01-407a-b228-c27646b48a92",
+                        "kubeletCa": "-----BEGIN CERTIFICATE-----\n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\n-----END CERTIFICATE-----\n",
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "metricsServer": true,
+                        "name": "hello-k8s-cluster",
+                        "nodepools": [],
+                        "serviceLevel": "pro",
+                        "state": "running",
+                        "version": "1.34.1",
+                        "zone": "ch-gva-2"
+                    },
+                    "parent": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "provider": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale::8ab96f6f-bfe1-494b-bec3-9139d24dadf1",
+                    "propertyDependencies": {
+                        "labels": [],
+                        "name": [],
+                        "zone": []
+                    },
+                    "created": "2025-10-24T16:56:23.496229186Z",
+                    "modified": "2025-10-24T16:56:23.496229186Z",
+                    "sourcePosition": "project:///__main__.py#16",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///__main__.py#16"
+                        },
+                        {},
+                        {},
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#188"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#207"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                },
+                {
+                    "urn": "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksNodepool:SksNodepool::hello-k8s-default",
+                    "custom": true,
+                    "id": "a4d24173-2fb8-4582-a757-252db5c6c149",
+                    "type": "exoscale:index/sksNodepool:SksNodepool",
+                    "inputs": {
+                        "__defaults": [
+                            "diskSize",
+                            "instancePrefix",
+                            "name",
+                            "storageLvm"
+                        ],
+                        "clusterId": "63ccf9bc-1e01-407a-b228-c27646b48a92",
+                        "diskSize": 50,
+                        "instancePrefix": "pool",
+                        "instanceType": "standard.medium",
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "name": "hello-k8s-default-3067e40",
+                        "size": 3,
+                        "storageLvm": false,
+                        "zone": "ch-gva-2"
+                    },
+                    "outputs": {
+                        "__meta": "{\"e2bfb730-ecaa-11e6-8f88-34363bc7c4c0\":{\"create\":300000000000,\"delete\":300000000000,\"read\":300000000000,\"update\":300000000000}}",
+                        "clusterId": "63ccf9bc-1e01-407a-b228-c27646b48a92",
+                        "createdAt": "2025-10-24 16:56:24 +0000 UTC",
+                        "deployTargetId": "",
+                        "description": "",
+                        "diskSize": 50,
+                        "id": "a4d24173-2fb8-4582-a757-252db5c6c149",
+                        "instancePoolId": "0e838e36-a376-4e86-b615-025887ea3a45",
+                        "instancePrefix": "pool",
+                        "instanceType": "standard.medium",
+                        "kubeletImageGcs": [],
+                        "labels": {
+                            "project_names": "hello-k8s"
+                        },
+                        "name": "hello-k8s-default-3067e40",
+                        "size": 3,
+                        "state": "running",
+                        "storageLvm": false,
+                        "templateId": "ba226d0b-8b72-4fd8-b0ed-17fb4e54fb66",
+                        "version": "1.34.1",
+                        "zone": "ch-gva-2"
+                    },
+                    "parent": "urn:pulumi:dev::sks-python-cluster::pulumi:pulumi:Stack::sks-python-cluster-dev",
+                    "dependencies": [
+                        "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                    ],
+                    "provider": "urn:pulumi:dev::sks-python-cluster::pulumi:providers:exoscale::default_0_59_2_github_/api.github.com/pulumiverse/pulumi-exoscale::8ab96f6f-bfe1-494b-bec3-9139d24dadf1",
+                    "propertyDependencies": {
+                        "clusterId": [
+                            "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                        ],
+                        "instanceType": [],
+                        "labels": [],
+                        "size": [],
+                        "zone": [
+                            "urn:pulumi:dev::sks-python-cluster::exoscale:index/sksCluster:SksCluster::hello-k8s-cluster"
+                        ]
+                    },
+                    "created": "2025-10-24T16:57:13.592906135Z",
+                    "modified": "2025-10-24T16:57:13.592906135Z",
+                    "sourcePosition": "project:///__main__.py#25",
+                    "stackTrace": [
+                        {
+                            "sourcePosition": "project:///__main__.py#25"
+                        },
+                        {},
+                        {},
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#188"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#207"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#178"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#79"
+                        },
+                        {
+                            "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/runtime/stack.py#181"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/events.py#84"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#1936"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#608"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/asyncio/base_events.py#641"
+                        },
+                        {
+                            "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                        }
+                    ]
+                }
+            ],
+            "metadata": {}
+        }
+    }
+}

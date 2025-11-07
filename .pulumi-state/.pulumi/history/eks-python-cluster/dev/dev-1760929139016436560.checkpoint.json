@@ -1,0 +1,206 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/eks-python-cluster/dev",
+        "latest": {
+            "manifest": {
+                "time": "2025-10-20T02:58:59.012478097Z",
+                "magic": "09ef7908916e9316cc9b98df3521baba02c1c9e71a54147152b3b7aae932941c",
+                "version": "v3.202.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:83JxThAhTPU=:v1:cVQ1bFwxI59EQsOQ:IstAz4+a2iTx+WdzD7sTdcCW7ThxzQ=="
+                }
+            },
+            "pending_operations": [
+                {
+                    "resource": {
+                        "urn": "urn:pulumi:dev::eks-python-cluster::aws:ec2/tag:Tag::Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.-cluster-tag-public-subnet-1",
+                        "custom": true,
+                        "type": "aws:ec2/tag:Tag",
+                        "inputs": {
+                            "__defaults": [],
+                            "key": "kubernetes.io/cluster/Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.",
+                            "region": "ca-central-1",
+                            "resourceId": "subnet-00b5e866d29e23abc",
+                            "value": "owned"
+                        },
+                        "parent": "urn:pulumi:dev::eks-python-cluster::pulumi:pulumi:Stack::eks-python-cluster-dev",
+                        "provider": "urn:pulumi:dev::eks-python-cluster::pulumi:providers:aws::default_7_7_0::bfa40baa-45f5-4265-abdf-7c3baba6c445",
+                        "propertyDependencies": {
+                            "key": [],
+                            "resourceId": [],
+                            "value": []
+                        },
+                        "sourcePosition": "project:///__main__.py#204",
+                        "stackTrace": [
+                            {
+                                "sourcePosition": "project:///__main__.py#204"
+                            },
+                            {
+                                "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/output.py#274"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/events.py#84"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#1936"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#608"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#641"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                            }
+                        ]
+                    },
+                    "type": "creating"
+                },
+                {
+                    "resource": {
+                        "urn": "urn:pulumi:dev::eks-python-cluster::aws:ec2/tag:Tag::Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.-cluster-tag-public-subnet-0",
+                        "custom": true,
+                        "type": "aws:ec2/tag:Tag",
+                        "inputs": {
+                            "__defaults": [],
+                            "key": "kubernetes.io/cluster/Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.",
+                            "region": "ca-central-1",
+                            "resourceId": "subnet-0dc8ca34778e9d5bc",
+                            "value": "owned"
+                        },
+                        "parent": "urn:pulumi:dev::eks-python-cluster::pulumi:pulumi:Stack::eks-python-cluster-dev",
+                        "provider": "urn:pulumi:dev::eks-python-cluster::pulumi:providers:aws::default_7_7_0::bfa40baa-45f5-4265-abdf-7c3baba6c445",
+                        "propertyDependencies": {
+                            "key": [],
+                            "resourceId": [],
+                            "value": []
+                        },
+                        "sourcePosition": "project:///__main__.py#204",
+                        "stackTrace": [
+                            {
+                                "sourcePosition": "project:///__main__.py#204"
+                            },
+                            {
+                                "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/output.py#274"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/events.py#84"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#1936"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#608"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#641"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                            }
+                        ]
+                    },
+                    "type": "creating"
+                },
+                {
+                    "resource": {
+                        "urn": "urn:pulumi:dev::eks-python-cluster::aws:ec2/tag:Tag::Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.-cluster-tag-public-subnet-0",
+                        "custom": true,
+                        "type": "aws:ec2/tag:Tag",
+                        "inputs": {
+                            "__defaults": [],
+                            "key": "kubernetes.io/cluster/Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.",
+                            "region": "ca-central-1",
+                            "resourceId": "subnet-0275d61d651a4bae7",
+                            "value": "owned"
+                        },
+                        "parent": "urn:pulumi:dev::eks-python-cluster::pulumi:pulumi:Stack::eks-python-cluster-dev",
+                        "provider": "urn:pulumi:dev::eks-python-cluster::pulumi:providers:aws::default_7_7_0::6429e3aa-4e33-485c-a20b-febfa567ea56",
+                        "propertyDependencies": {
+                            "key": [],
+                            "resourceId": [],
+                            "value": []
+                        },
+                        "sourcePosition": "project:///__main__.py#204",
+                        "stackTrace": [
+                            {
+                                "sourcePosition": "project:///__main__.py#204"
+                            },
+                            {
+                                "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/output.py#274"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/events.py#84"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#1936"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#608"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#641"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                            }
+                        ]
+                    },
+                    "type": "creating"
+                },
+                {
+                    "resource": {
+                        "urn": "urn:pulumi:dev::eks-python-cluster::aws:ec2/tag:Tag::Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.-cluster-tag-public-subnet-1",
+                        "custom": true,
+                        "type": "aws:ec2/tag:Tag",
+                        "inputs": {
+                            "__defaults": [],
+                            "key": "kubernetes.io/cluster/Calling __str__ on an Output[T] is not supported.\n\nTo get the value of an Output[T] as an Output[str] consider:\n1. o.apply(lambda v: f\"prefix{v}suffix\")\n\nSee https://www.pulumi.com/docs/concepts/inputs-outputs for more details.\nThis function may throw in a future version of Pulumi.",
+                            "region": "ca-central-1",
+                            "resourceId": "subnet-011600c75262dbd3c",
+                            "value": "owned"
+                        },
+                        "parent": "urn:pulumi:dev::eks-python-cluster::pulumi:pulumi:Stack::eks-python-cluster-dev",
+                        "provider": "urn:pulumi:dev::eks-python-cluster::pulumi:providers:aws::default_7_7_0::6429e3aa-4e33-485c-a20b-febfa567ea56",
+                        "propertyDependencies": {
+                            "key": [],
+                            "resourceId": [],
+                            "value": []
+                        },
+                        "sourcePosition": "project:///__main__.py#204",
+                        "stackTrace": [
+                            {
+                                "sourcePosition": "project:///__main__.py#204"
+                            },
+                            {
+                                "sourcePosition": "project:///venv/lib/python3.11/site-packages/pulumi/output.py#274"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/events.py#84"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#1936"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#608"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/asyncio/base_events.py#641"
+                            },
+                            {
+                                "sourcePosition": "project:///../../../../../../../usr/local/bin/pulumi-language-python-exec#232"
+                            }
+                        ]
+                    },
+                    "type": "creating"
+                }
+            ],
+            "metadata": {}
+        }
+    }
+}

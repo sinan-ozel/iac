@@ -16,6 +16,7 @@ on:
         type: choice
         options:
           - llm.env
+          - eberron-llm.env
 
       action:
         description: "Terraform action to perform"
@@ -48,16 +49,35 @@ jobs:
       - name: Install dependencies
         run: pip install boto3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-iac
-          aws-region: ${{ env.REGION }}
-
       - name: Load the config and run the action
         run: |
           echo "Loading env file: ${{ inputs.config }}"
           set -a
           source "configs/${{ inputs.provider }}/${{ inputs.config }}"
           set +a
+          grep -v '^#' "configs/${{ inputs.provider }}/${{ inputs.config }}" | grep -E '^[A-Za-z_][A-Za-z0-9_]*=' >> $GITHUB_ENV
+
+
+      - name: Create AWS credentials secret
+        if: github.event.inputs.provider == 'aws'
+        run: |
+          mkdir -p tmp
+          printf "[default]\naws_access_key_id=%s\naws_secret_access_key=%s\nregion=%s\n" \
+            "${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            "${{ env.REGION }}" > tmp/credentials
+
+          AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
+          ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
+          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-iac
+          aws-region: ${{ env.REGION }}
+
+      - name: Run volume action
+        run: |
           PYTHONPATH=. python scripts/${{ inputs.provider }}/volume/${{ inputs.action }}.py
+

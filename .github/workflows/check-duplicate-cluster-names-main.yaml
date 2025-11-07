@@ -22,17 +22,22 @@ jobs:
           declare -A cluster_names
           duplicates=0
 
-          for file in configs/*/*.env; do
-            if grep -q '^CLUSTER_NAME=' "$file"; then
-              name=$(grep '^CLUSTER_NAME=' "$file" | cut -d= -f2-)
-              if [[ -n "${cluster_names[$name]:-}" ]]; then
-                echo "❌ Duplicate CLUSTER_NAME '$name' found in:"
-                echo " - ${cluster_names[$name]}"
-                echo " - $file"
-                duplicates=1
-              else
-                cluster_names["$name"]="$file"
-              fi
+          for dir in configs/*; do
+            declare -A cluster_names=()
+            if [ -d "$dir" ]; then
+              for file in "$dir"/*.env; do
+                if grep -q '^CLUSTER_NAME=' "$file"; then
+                  name=$(grep '^CLUSTER_NAME=' "$file" | cut -d= -f2-)
+                  if [[ -n "${cluster_names[$name]:-}" ]]; then
+                    echo "❌ Duplicate CLUSTER_NAME '$name' found in:"
+                    echo " - ${cluster_names[$name]}"
+                    echo " - $file"
+                    duplicates=1
+                  else
+                    cluster_names["$name"]="$file"
+                  fi
+                fi
+              done
             fi
           done
 

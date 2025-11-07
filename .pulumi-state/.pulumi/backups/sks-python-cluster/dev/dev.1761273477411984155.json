@@ -1,0 +1,20 @@
+{
+    "version": 3,
+    "checkpoint": {
+        "stack": "organization/sks-python-cluster/dev",
+        "latest": {
+            "manifest": {
+                "time": "2025-10-24T02:37:57.407960443Z",
+                "magic": "f415235851c84a9e7a4e0a681c656397e9a77db2af82cf68da1db8846c339524",
+                "version": "v3.198.0"
+            },
+            "secrets_providers": {
+                "type": "passphrase",
+                "state": {
+                    "salt": "v1:ncKIfYrvCYU=:v1:9SkfEqopuT/7ZXiY:VmLsJqwaV0yqOTCcxM18TQf5CS+xLQ=="
+                }
+            },
+            "metadata": {}
+        }
+    }
+}

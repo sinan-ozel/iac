@@ -1,0 +1,42 @@
+{
+    "kind": "destroy",
+    "startTime": 1760562089,
+    "message": "Update EBS volume status report",
+    "environment": {
+        "ci.build.id": "18542506620",
+        "ci.build.number": "329",
+        "ci.build.type": "workflow_dispatch",
+        "ci.build.url": "https://github.com/sinan-ozel/iac-private/actions/runs/18542506620",
+        "ci.pr.headSHA": "3619c17f4107d8a76ce0fbc21db3cafbcef1ba7e",
+        "ci.system": "GitHub Actions",
+        "exec.kind": "cli",
+        "git.author": "github-actions",
+        "git.author.email": "github-actions@users.noreply.github.com",
+        "git.committer": "github-actions",
+        "git.committer.email": "github-actions@users.noreply.github.com",
+        "git.dirty": "true",
+        "git.head": "3619c17f4107d8a76ce0fbc21db3cafbcef1ba7e",
+        "git.headName": "refs/heads/main",
+        "pulumi.arch": "amd64",
+        "pulumi.env.PULUMI_BACKEND_URL": "set",
+        "pulumi.env.PULUMI_CONFIG_PASSPHRASE": "set",
+        "pulumi.flag.non-interactive": "true",
+        "pulumi.flag.yes": "true",
+        "pulumi.os": "linux",
+        "pulumi.version": "v3.198.0",
+        "stack.environments": "[]",
+        "updatePlan": "false",
+        "vcs.kind": "github.com",
+        "vcs.owner": "sinan-ozel",
+        "vcs.repo": "iac-private",
+        "vcs.root": "pulumi/aws"
+    },
+    "config": {},
+    "version": 0,
+    "result": "succeeded",
+    "endTime": 1760562390,
+    "resourceChanges": {
+        "delete": 47,
+        "discard": 1
+    }
+}

@@ -8,6 +8,7 @@ import boto3
 # Expected logical volume names
 VOLUME_NAMES = [
     'llm',
+    'eberron-llm',
     'notebooks',
 ]
 

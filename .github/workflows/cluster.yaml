@@ -20,6 +20,7 @@ on:
           - hello-k8s-ch-gva-2.env
           - kubyterlab-llm-ca-central-1.env
           - personal-cloud-ch-gva-2.env
+          - eberron-llm.env
 
       action:
         description: "Action to perform"

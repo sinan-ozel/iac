@@ -1,0 +1,42 @@
+{
+    "kind": "destroy",
+    "startTime": 1760473070,
+    "message": ".gitignore Pulumi backups and .env files",
+    "environment": {
+        "ci.build.id": "18508935122",
+        "ci.build.number": "324",
+        "ci.build.type": "workflow_dispatch",
+        "ci.build.url": "https://github.com/sinan-ozel/iac-private/actions/runs/18508935122",
+        "ci.pr.headSHA": "41eef91951d85b25ade52c8abd8d0c1daaab1ba8",
+        "ci.system": "GitHub Actions",
+        "exec.kind": "cli",
+        "git.author": "Sinan Ozel",
+        "git.author.email": "4183117+sinan-ozel@users.noreply.github.com",
+        "git.committer": "Sinan Ozel",
+        "git.committer.email": "4183117+sinan-ozel@users.noreply.github.com",
+        "git.dirty": "true",
+        "git.head": "41eef91951d85b25ade52c8abd8d0c1daaab1ba8",
+        "git.headName": "refs/heads/main",
+        "pulumi.arch": "amd64",
+        "pulumi.env.PULUMI_BACKEND_URL": "set",
+        "pulumi.env.PULUMI_CONFIG_PASSPHRASE": "set",
+        "pulumi.flag.non-interactive": "true",
+        "pulumi.flag.yes": "true",
+        "pulumi.os": "linux",
+        "pulumi.version": "v3.198.0",
+        "stack.environments": "[]",
+        "updatePlan": "false",
+        "vcs.kind": "github.com",
+        "vcs.owner": "sinan-ozel",
+        "vcs.repo": "iac-private",
+        "vcs.root": "pulumi/aws"
+    },
+    "config": {},
+    "version": 0,
+    "result": "succeeded",
+    "endTime": 1760473395,
+    "resourceChanges": {
+        "delete": 47,
+        "discard": 1
+    }
+}

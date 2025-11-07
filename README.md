@@ -285,15 +285,7 @@ When not possible, add or modify a custom script under `scripts/`. You will see 
 
 ## How to add a new provider
 
-If possible, add the provider under `pulumi` folder with a lowercase name for the provider (e.g. `azure` or `gcp`) and add the three Pulumi files `__main__.py`, `Pulumi.yaml` and `requirements.txt`.
-The ideal situation is that everything is done through Pulumi and Python.
-
-If Pulumi is not enough, and you need to write a script to call APIs, etc, put these under `scripts`, with the same format, where the second-level folder is the cloud provider.
-
-Put the required configuration files under `configs`. The purpose is to have different variations of the same cluster, for instance, `dev`, `prod`, or different centres by region. These are meant to have only environmental variables, working as `.env` files. Once again, each cloud provider has its own folder.
-
-Whenever privilege or role-related changes are need (IAM in AWS terminology), do not rely on the workflow.
-Instead, containerize and put into the `local_scripts` folder. (As an example, see the subfolder [local_scripts/aws/eks_admin_role](local_scripts/aws/eks_admin_role)). This ensures that the github role does not require permissions to create or destroy roles, or increase privileges. At the same time, thanks to containerization, multiple team members can create roles.
+TODO
 
 ## How to add a new service
 
