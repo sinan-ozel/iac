@@ -101,7 +101,7 @@ pulumi.export("node_instance_profile_name", node_instance_profile.name)
 # EKS Cluster
 cluster = eks.Cluster(f"{CLUSTER_NAME}",
     vpc_id=vpc.vpc_id,
-    version="1.34",
+    version="1.32",
     public_subnet_ids=vpc.public_subnet_ids,
     private_subnet_ids=vpc.private_subnet_ids,
     instance_roles=[node_role],
@@ -170,8 +170,8 @@ if GPU_NODE_COUNT:
         min_size=GPU_NODE_COUNT,
         max_size=GPU_NODE_COUNT,
         instance_type="g4dn.xlarge",
-        # ami_type="AL2_x86_64_GPU",
-        gpu=True,
+        ami_type="AL2_x86_64_GPU",
+        # gpu=True,
         auto_scaling_group_tags={**common_tags, "Name": f"{CLUSTER_NAME}-nodegroup-gpu"},
         taints={
             "nvidia.com/gpu": eks.TaintArgs(
@@ -186,4 +186,18 @@ pulumi.export("kubeconfig", cluster.kubeconfig)
 pulumi.export("region", REGION)
 pulumi.export("cluster_name", cluster.core.cluster.name)
 pulumi.export("public_subnet_ids", vpc.public_subnet_ids)
+
+# # Install AWS EBS CSI Driver via Helm
+# ebs_csi = k8s.helm.v3.Chart(
+#     "aws-ebs-csi-driver",
+#     k8s.helm.v3.ChartOpts(
+#         chart="aws-ebs-csi-driver",
+#         version="2.30.0",
+#         fetch_opts=k8s.helm.v3.FetchOpts(
+#             repo="https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
+#         ),
+#         namespace="kube-system",
+#     ),
+#     opts=pulumi.ResourceOptions(provider=k8s_provider),
+# )
 

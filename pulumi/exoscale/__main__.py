@@ -50,6 +50,10 @@ if GPU_NODE_COUNT:
         }]
     )
 
+print(dir(exoscale))
+
+print(dir(cluster))
+
 sks_kubeconfig = exoscale.SksKubeconfig("kubeconfig",
     cluster_id=cluster.id,
     groups=["system:masters"],
@@ -58,7 +62,10 @@ sks_kubeconfig = exoscale.SksKubeconfig("kubeconfig",
     early_renewal_seconds=0,
     ttl_seconds=0)
 
+print(dir(sks_kubeconfig))
+
 pulumi.export("kubeconfig", sks_kubeconfig.kubeconfig)
 pulumi.export("region", REGION)
 pulumi.export("cluster_name", cluster.name)
+# pulumi.export("public_subnet_ids", vpc.public_subnet_ids)
 

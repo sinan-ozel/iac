@@ -1,5 +1,6 @@
 import os
 import boto3
+import json
 from operator import itemgetter
 
 from helpers import wait_until
@@ -77,13 +78,18 @@ else:
                         + [{'Key': 'Name', 'Value': NAME}]
             }]
         )
+    volume_id = response['VolumeId']
 
     wait_until(
         check=ec2_client.describe_volumes,
-        kwargs={'VolumeIds': [response['VolumeId']]},
+        kwargs={'VolumeIds': [volume_id]},
         cond=lambda x: x['Volumes'][0]['State'].lower() == 'available'
     )
-    volume_id = response['VolumeId']
 
 print(f"Provisioned Volume ID: {volume_id}")
 print(f"Availability Zone: {availability_zone}")
+
+with open(f'volume-aws-{NAME}.json', 'w') as f:
+    json.dump({
+        'volume_id': volume_id,
+    }, f)
