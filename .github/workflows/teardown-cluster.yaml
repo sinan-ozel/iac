@@ -1,0 +1,37 @@
+name: 02. Teardown Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Select the cloud provider"
+        required: true
+        type: choice
+        options:
+          - aws
+          - exoscale
+
+      config:
+        description: "Select the .env file to use"
+        required: true
+        type: choice
+        options:
+          - hello-k8s-ca-central-1.env
+          - hello-k8s-ch-gva-2.env
+          - kubyterlab-llm-ca-central-1.env
+          - model-server-ca-central-1.env
+          - model-server-ch-gva-2.env
+          - personal-cloud-ch-gva-2.env
+          - eberron-llm.env
+
+jobs:
+  teardown:
+    uses: ./.github/workflows/cluster.yaml
+    with:
+      provider: ${{ inputs.provider }}
+      config: ${{ inputs.config }}
+      action: teardown
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: write

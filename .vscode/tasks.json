@@ -70,13 +70,14 @@
 			"id": "eksCluster",
 			"type": "pickString",
 			"description": "Enter the EKS cluster name",
-			"options": ["hello-k8s"]
+			"options": ["hello-k8s", "model-server"]
 		},
 		{
 			"id": "eksRepo",
 			"type": "pickString",
 			"description": "Enter the GitHub repo name",
-			"options": ["jupyterlab-on-kubernetes"]
+			"options": ["jupyterlab-on-kubernetes", "model-servers"]
 		}
 	]
 }
+

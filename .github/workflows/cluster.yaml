@@ -19,6 +19,8 @@ on:
           - hello-k8s-ca-central-1.env
           - hello-k8s-ch-gva-2.env
           - kubyterlab-llm-ca-central-1.env
+          - model-server-ca-central-1.env
+          - model-server-ch-gva-2.env
           - personal-cloud-ch-gva-2.env
           - eberron-llm.env
 
@@ -29,17 +31,36 @@ on:
         options:
           - provision
           - teardown
+          - test
         default: provision
+
+  workflow_call:
+    inputs:
+      provider:
+        description: "Select the cloud provider"
+        required: true
+        type: string
+
+      config:
+        description: "Select the .env file to use"
+        required: true
+        type: string
+
+      action:
+        description: "Action to perform"
+        required: true
+        type: string
 
 jobs:
   provision-teardown:
+    if: inputs.action != 'test'
     env:
       PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_PASSPHRASE }}
       EXOSCALE_API_KEY: ${{ secrets.EXOSCALE_API_KEY }}
       EXOSCALE_API_SECRET: ${{ secrets.EXOSCALE_API_SECRET }}
       PULUMI_BACKEND_URL: file://${{ github.workspace }}/.pulumi-state
       PYTHONPATH: ${{ github.workspace }}
-    name: Provision / Teardown Cluster
+    name: ${{ inputs.action == 'provision' && 'Provision Cluster' || 'Teardown Cluster' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -130,7 +151,7 @@ jobs:
           pulumi up --yes --non-interactive
 
       # The following step is necessary because we install load balancers through helm charts, so Pulumi cannot handle them.
-      - name: Teardown IGW
+      - name: Teardown Load Balancers
         if: ${{ inputs.action == 'teardown' && inputs.provider == 'aws' }}
         run: |
           python scripts/${{ inputs.provider }}/cluster/teardown_load_balancer.py
@@ -203,3 +224,102 @@ jobs:
         if: steps.provision.conclusion == 'success' && github.event.inputs.provider == 'aws'
         run: |
           python scripts/aws/cluster/tag_subnets.py pulumi/${{ inputs.provider }}/${{ env.CLUSTER_NAME}}.json
+
+  test:
+    name: Test Cluster
+    if: inputs.action == 'provision' || inputs.action == 'test'
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Load the config
+        id: load-config
+        run: |
+          echo "Loading env file: ${{ inputs.config }}"
+          set -a
+          source "configs/${{ inputs.provider }}/${{ inputs.config }}"
+          set +a
+          grep -v '^#' "configs/${{ inputs.provider }}/${{ inputs.config }}" | grep -E '^[A-Za-z_][A-Za-z0-9_]*=' >> $GITHUB_ENV
+
+          # Export CLUSTER_NAME for artifact download
+          CLUSTER_NAME=$(grep '^CLUSTER_NAME=' "configs/${{ inputs.provider }}/${{ inputs.config }}" | cut -d'=' -f2)
+          echo "cluster_name=$CLUSTER_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create AWS credentials secret
+        if: github.event.inputs.provider == 'aws'
+        run: |
+          mkdir -p tmp
+          printf "[default]\naws_access_key_id=%s\naws_secret_access_key=%s\nregion=%s\n" \
+            "${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            "${{ env.REGION }}" > tmp/credentials
+
+          AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity
+          ACCOUNT_ID=$(AWS_SHARED_CREDENTIALS_FILE=tmp/credentials aws sts get-caller-identity --query Account --output text)
+          echo "AWS_ACCOUNT_ID=$ACCOUNT_ID" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        if: github.event.inputs.provider == 'aws'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-iac
+          aws-region: ${{ env.REGION }}
+
+      - name: Download Kubeconfig artifact (from previous run)
+        if: inputs.action == 'test'
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          name: pulumi-${{ inputs.provider }}-${{ steps.load-config.outputs.cluster_name }}
+          workflow_conclusion: success
+          search_artifacts: true
+          if_no_artifact_found: fail
+
+      - name: Convert Kubeconfig artifact
+        run: |
+          cat ${{ steps.load-config.outputs.cluster_name }}.json | jq -r '.kubeconfig' > kubeconfig.yaml
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/stable.txt"
+          KUBECTL_VERSION=$(cat stable.txt)
+          curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Test cluster nodes
+        run: |
+          export KUBECONFIG=kubeconfig.yaml
+
+          cat kubeconfig.yaml
+
+          echo "Expected nodes: DEFAULT_NODE_COUNT=${{ env.DEFAULT_NODE_COUNT }}, GPU_NODE_COUNT=${{ env.GPU_NODE_COUNT }}"
+
+          # Calculate expected node count
+          DEFAULT_NODES=${{ env.DEFAULT_NODE_COUNT }}
+          GPU_NODES=${{ env.GPU_NODE_COUNT }}
+          EXPECTED_NODES=$((DEFAULT_NODES + GPU_NODES))
+
+          echo "Total expected nodes: $EXPECTED_NODES"
+
+          # Get actual node count
+          ACTUAL_NODES=$(kubectl get nodes --no-headers | wc -l)
+          echo "Actual nodes in cluster: $ACTUAL_NODES"
+
+          # Display node details
+          echo "Node details:"
+          kubectl get nodes -o wide
+          KUBECONFIG=kubeconfig.yaml kubectl get nodes -o wide
+
+          # Verify node count matches
+          if [ "$ACTUAL_NODES" -eq "$EXPECTED_NODES" ]; then
+            echo "✅ SUCCESS: Node count matches! Expected: $EXPECTED_NODES, Actual: $ACTUAL_NODES"
+          else
+            echo "❌ FAILURE: Node count mismatch! Expected: $EXPECTED_NODES, Actual: $ACTUAL_NODES"
+            exit 1
+          fi

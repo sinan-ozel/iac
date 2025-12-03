@@ -101,7 +101,7 @@ pulumi.export("node_instance_profile_name", node_instance_profile.name)
 # EKS Cluster
 cluster = eks.Cluster(f"{CLUSTER_NAME}",
     vpc_id=vpc.vpc_id,
-    version="1.32",
+    version="1.34",
     public_subnet_ids=vpc.public_subnet_ids,
     private_subnet_ids=vpc.private_subnet_ids,
     instance_roles=[node_role],
@@ -162,24 +162,45 @@ for admin_repo in ADMIN_REPO_LIST:
 
 # Node Group 2: GPU
 if GPU_NODE_COUNT:
-    nodegroup_gpu = eks.NodeGroupV2(f"{CLUSTER_NAME}-nodegroup-gpu",
-        cluster=cluster,
-        instance_profile_name=node_instance_profile.name,
-        node_subnet_ids=vpc.private_subnet_ids,
-        desired_capacity=GPU_NODE_COUNT,
-        min_size=GPU_NODE_COUNT,
-        max_size=GPU_NODE_COUNT,
-        instance_type="g4dn.xlarge",
-        ami_type="AL2_x86_64_GPU",
-        # gpu=True,
-        auto_scaling_group_tags={**common_tags, "Name": f"{CLUSTER_NAME}-nodegroup-gpu"},
-        taints={
-            "nvidia.com/gpu": eks.TaintArgs(
-                value="true",
-                effect="NO_SCHEDULE"
-            )
-        }
+    # nodegroup_gpu = eks.NodeGroupV2(f"{CLUSTER_NAME}-nodegroup-gpu",
+    #     cluster=cluster,
+    #     instance_profile_name=node_instance_profile.name,
+    #     node_subnet_ids=vpc.private_subnet_ids,
+    #     desired_capacity=GPU_NODE_COUNT,
+    #     min_size=GPU_NODE_COUNT,
+    #     max_size=GPU_NODE_COUNT,
+    #     instance_type="g4dn.xlarge",
+    #     ami_id='ami-0b00a6292fe0f78d1',
+    #     ami_type="AL2023_x86_64_NVIDIA",
+    #     # gpu=True,
+    #     auto_scaling_group_tags={**common_tags, "Name": f"{CLUSTER_NAME}-nodegroup-gpu"},
+    #     taints={
+    #         "nvidia.com/gpu": eks.TaintArgs(
+    #             value="true",
+    #             effect="NO_SCHEDULE"
+    #         )
+    #     }
+    # )
+
+    nodegroup_gpu = aws.eks.NodeGroup(f"{CLUSTER_NAME}-nodegroup-gpu",
+        cluster_name=cluster.core.cluster.name,
+        node_role_arn=node_role.arn,
+        subnet_ids=vpc.private_subnet_ids,
+        scaling_config=aws.eks.NodeGroupScalingConfigArgs(
+            desired_size=GPU_NODE_COUNT,
+            min_size=GPU_NODE_COUNT,
+            max_size=GPU_NODE_COUNT,
+        ),
+        instance_types=["g4dn.xlarge"],
+        ami_type="AL2023_x86_64_NVIDIA",
+        tags={**common_tags, "Name": f"{CLUSTER_NAME}-nodegroup-gpu"},
+        taints=[aws.eks.NodeGroupTaintArgs(
+            key="nvidia.com/gpu",
+            value="true",
+            effect="NO_SCHEDULE"
+        )],
     )
+
 
 # Export kubeconfig and region
 pulumi.export("kubeconfig", cluster.kubeconfig)

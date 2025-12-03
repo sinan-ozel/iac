@@ -78,6 +78,13 @@ jobs:
           aws-region: ${{ env.REGION }}
 
       - name: Run volume action
+        id: action
         run: |
           PYTHONPATH=. python scripts/${{ inputs.provider }}/volume/${{ inputs.action }}.py
 
+      - name: Upload artifact
+        if: steps.action.conclusion == 'success' && inputs.action == 'provision'
+        uses: actions/upload-artifact@v4
+        with:
+          name: volume-${{ inputs.provider }}-${{ env.VOLUME_NAME}}
+          path: volume-${{ inputs.provider }}-${{ env.VOLUME_NAME}}.json
