@@ -26,6 +26,7 @@ on:
 
 jobs:
   teardown:
+    name: Teardown Cluster
     uses: ./.github/workflows/cluster.yaml
     with:
       provider: ${{ inputs.provider }}
@@ -35,3 +36,4 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      actions: read

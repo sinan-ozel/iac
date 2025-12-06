@@ -26,6 +26,7 @@ if not CLUSTER_NAME:
 REGION = os.environ.get('REGION', 'ca-central-1')
 DEFAULT_NODE_COUNT = get_env_count('DEFAULT_NODE_COUNT') or 1
 GPU_NODE_COUNT = get_env_count('GPU_NODE_COUNT')
+GPU_EPHEMERAL_VOLUME_SIZE = os.environ.get('GPU_EPHEMERAL_VOLUME_SIZE', '100')  # in GB, default 100GB
 AWS_AVAILABILITY_ZONE_CHARS = ['a', 'b']
 
 AWS_ACCOUNT_ID = os.getenv("AWS_ACCOUNT_ID")
@@ -191,15 +192,50 @@ if GPU_NODE_COUNT:
             min_size=GPU_NODE_COUNT,
             max_size=GPU_NODE_COUNT,
         ),
-        instance_types=["g4dn.xlarge"],
+        instance_types=["g4dn.2xlarge"],
         ami_type="AL2023_x86_64_NVIDIA",
         tags={**common_tags, "Name": f"{CLUSTER_NAME}-nodegroup-gpu"},
+        disk_size=int(GPU_EPHEMERAL_VOLUME_SIZE),
         taints=[aws.eks.NodeGroupTaintArgs(
             key="nvidia.com/gpu",
             value="true",
             effect="NO_SCHEDULE"
         )],
     )
+
+    # Get security group IDs
+    # The eks.Cluster creates a node security group for the default node group
+    # The cluster also has a cluster security group that all nodes use
+    cluster_sg_id = cluster.core.cluster.vpc_config.cluster_security_group_id
+    node_sg_id = cluster.node_security_group_id
+
+    # Allow traffic between cluster security group (used by GPU nodes) and node security group (used by CPU nodes)
+    aws.ec2.SecurityGroupRule(
+        f"{CLUSTER_NAME}-cluster-to-node-ingress",
+        type="ingress",
+        from_port=0,
+        to_port=65535,
+        protocol="-1",
+        security_group_id=node_sg_id,
+        source_security_group_id=cluster_sg_id,
+        description="Allow cluster SG (GPU nodes) to communicate with node SG (CPU nodes)"
+    )
+
+    aws.ec2.SecurityGroupRule(
+        f"{CLUSTER_NAME}-node-to-cluster-ingress",
+        type="ingress",
+        from_port=0,
+        to_port=65535,
+        protocol="-1",
+        security_group_id=cluster_sg_id,
+        source_security_group_id=node_sg_id,
+        description="Allow node SG (CPU nodes) to communicate with cluster SG (GPU nodes)"
+    )
+
+
+    # Export the security group IDs for reference
+    pulumi.export("cluster_managed_security_group_id", cluster_sg_id)
+    pulumi.export("node_security_group_id", node_sg_id)
 
 
 # Export kubeconfig and region

@@ -132,6 +132,15 @@ And also attash two "inline policies" - I also replace the asterisk in `::*:` wi
             ]
         },
         {
+            "Sid": "EKSServiceLinkedRole",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:CreateServiceLinkedRole"
+            ],
+            "Resource": "arn:aws:iam::*:role/aws-service-role/*/*"
+        },
+        {
             "Sid": "PulumiReadNodeRoles",
             "Effect": "Allow",
             "Action": [
@@ -215,7 +224,20 @@ And also attash two "inline policies" - I also replace the asterisk in `::*:` wi
                 "eks:DisassociateAccessPolicy",
                 "eks:ListAssociatedAccessPolicies",
                 "eks:UpdateClusterConfig",
-                "ssm:GetParameter"
+                "ssm:GetParameter",
+                "ec2:DisassociateAddress",
+                "ec2:ReleaseAddress",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeVpcs",
+                "ec2:DetachNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DeleteTargetGroup",
+                "elasticloadbalancing:DescribeListeners",
+                "elasticloadbalancing:DeleteListener"
             ],
             "Resource": "*"
         }

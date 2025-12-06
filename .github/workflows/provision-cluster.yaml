@@ -26,6 +26,7 @@ on:
 
 jobs:
   provision:
+    name: Provision Cluster
     uses: ./.github/workflows/cluster.yaml
     with:
       provider: ${{ inputs.provider }}
@@ -35,3 +36,4 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      actions: read

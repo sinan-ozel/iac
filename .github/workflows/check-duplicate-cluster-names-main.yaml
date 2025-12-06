@@ -1,4 +1,4 @@
-name: Check Cluster Names on Main
+name: _Check_Cluster_Names_on_Main
 
 on:
   push:

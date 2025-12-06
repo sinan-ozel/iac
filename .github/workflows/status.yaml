@@ -1,10 +1,10 @@
-name: Generate Status Report
+name: _Generate_Status_Report
 
 on:
   workflow_run:
     workflows:
       - 01. Volumes
-      - 02. Cluster
+      - _Cluster_Management
     types:
       - completed
 

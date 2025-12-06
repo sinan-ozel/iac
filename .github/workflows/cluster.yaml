@@ -1,4 +1,4 @@
-name: 02. Cluster
+name: _Cluster_Management
 
 on:
   workflow_dispatch:
@@ -167,13 +167,25 @@ jobs:
       - name: Commit Pulumi state
         if: always()
         run: |
-          git config pull.rebase true
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add .pulumi-state
           git commit -m "Update Pulumi state after ${{ inputs.action }}" || echo "No changes to commit"
-          git pull
-          git push
+
+          # Try to pull and push with retry logic for concurrent updates
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            git pull --no-rebase --no-edit && git push && break
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            echo "Pull/push failed, retry $RETRY_COUNT of $MAX_RETRIES"
+            sleep $((RETRY_COUNT * 2))
+          done
+
+          if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+            echo "Failed to push after $MAX_RETRIES attempts"
+            exit 1
+          fi
 
       - name: Export Pulumi outputs
         if: steps.provision.conclusion == 'success'
@@ -227,10 +239,15 @@ jobs:
 
   test:
     name: Test Cluster
-    if: inputs.action == 'provision' || inputs.action == 'test'
+    if: |
+      always() &&
+      (inputs.action == 'provision' || inputs.action == 'test') &&
+      (inputs.action == 'test' || needs.provision-teardown.result == 'success')
+    needs: [provision-teardown]
     runs-on: ubuntu-latest
 
     permissions:
+      id-token: write
       actions: read
       contents: read
 
@@ -271,12 +288,20 @@ jobs:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-iac
           aws-region: ${{ env.REGION }}
 
+      - name: Download Kubeconfig artifact (from current run)
+        if: inputs.action == 'provision'
+        uses: actions/download-artifact@v4
+        with:
+          name: pulumi-${{ inputs.provider }}-${{ steps.load-config.outputs.cluster_name }}
+
       - name: Download Kubeconfig artifact (from previous run)
         if: inputs.action == 'test'
         uses: dawidd6/action-download-artifact@v6
         with:
           name: pulumi-${{ inputs.provider }}-${{ steps.load-config.outputs.cluster_name }}
+          workflow: cluster.yaml
           workflow_conclusion: success
+          branch: ${{ github.ref_name }}
           search_artifacts: true
           if_no_artifact_found: fail
 

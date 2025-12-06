@@ -1,4 +1,4 @@
-name: Check Cluster Names on Dev Branches
+name: _Check_Cluster_Names_on_Dev
 
 on:
   push:
