@@ -8,7 +8,7 @@ NAME = os.environ['VOLUME_NAME']
 EBS_VOLUME_SIZE = int(os.environ['VOLUME_SIZE'])
 
 # Hardcoded constants
-REGION = os.environ.get('REGION', 'ca-central-1')
+REGION = os.environ.get('AWS_REGION', 'ca-central-1')
 TAGS = {'name': NAME}
 FILTERS = [{'Name': f'tag:{k}', 'Values': [v]} for k, v in TAGS.items()]
 

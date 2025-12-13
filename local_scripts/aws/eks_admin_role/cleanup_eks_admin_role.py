@@ -4,10 +4,10 @@ import os
 import fnmatch
 
 # Ensure required env vars are set
-REGION = os.environ.get("REGION")
+REGION = os.environ.get("AWS_REGION")
 ORG = os.environ.get("GITHUB_ORGANIZATION_NAME")
 if not REGION or not ORG:
-    raise RuntimeError("Both REGION and GITHUB_ORGANIZATION_NAME must be set.")
+    raise RuntimeError("Both AWS_REGION and GITHUB_ORGANIZATION_NAME must be set.")
 
 iam = boto3.client("iam", region_name=REGION)
 

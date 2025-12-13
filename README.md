@@ -19,9 +19,17 @@ It is based on the following principles:
 
 ## Overview
 
-* Roles and users are created through local scripts (see an example [here](local_scripts/aws/eks_admin_role/)) and VS Code tasks (Just run ''Run Tasks'' and choose ''Create EKS admin role'' to see.). This is intentional, we are not letting this to be done through GitHub.
-* Most of the infrastructure is declared through Pulumi (see here for an [AWS example](pulumi/aws/__main__.py)), configured through `.env` files (see [here](configs/aws/hello-k8s-ca-central-1.env) for an example) and orchestrated through [GitHub actions](.github/workflows/cluster.yaml).
-* Some things have to be done through custom scripts, and these need to repeated for different providers. For instance, I want to take a snapshot before teardown on volumes, and I want to bring it back up from the snashot. These scripts are in the [`scripts/`](scripts/) folder, structured as `scripts/<provider>/<infrastructure>`
+* Roles and users are created through local scripts (see an example [here](local_scripts/aws/eks_admin_role/)) and VS Code tasks (Just run 'Run Tasks' and choose 'Create EKS admin role' to see.). This is intentional, we are not letting this to be done through GitHub.
+* Most of the infrastructure is declared through Pulumi (see here for an [AWS example](pulumi/aws/__main__.py)), configured through `.env` files (see [configs/README.md](configs/README.md) for details) and orchestrated through [GitHub actions](.github/workflows/cluster.yaml).
+* Some things have to be done through custom scripts, and these need to repeated for different providers. For instance, I want to take a snapshot before teardown on volumes, and I want to bring it back up from the snapshot. These scripts are in the [`scripts/`](scripts/) folder, structured as `scripts/<provider>/<infrastructure>`
+
+## Configuration
+
+Infrastructure configuration lives in `configs/*.env` files. Each config defines both AWS and Exoscale parameters, allowing the same config to work across providers. See [configs/README.md](configs/README.md) for:
+- Available configuration options
+- Workflow tier structure (01. Volumes, 02. Clusters)
+- Opinionated node type philosophy (standardized GPU and standard nodes)
+- Multi-cloud flexibility
 
 
 ## ✨ Features
@@ -292,7 +300,7 @@ Set up the following secrets in the repo:
 # 🏗️ Structure
 
 * `pulumi/*/` holds all the Pulumi configuration for a standard cluster. `*` here is the cloud provider. Right now I only have `aws` and `exoscale`, I might add `azure` and `gcp` in the future.
-* `configs/*/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
+* `configs/` have all of the different configurations of each project. I think of these as `dev`, `staging`, but they can also be different centres serving different geographic regions in professional environments.
 * `scripts/*/cluster` and `scripts/*/volume`: this is where the scripts completely custom to the provider live. The idea is to use Pulumi as much as possible, and then fall back to these scripts whenever necessary. This is because Pulumi is much easier to read. In general, the folder structure is `scripts/<provider>/<infrastructure>`.
 
 

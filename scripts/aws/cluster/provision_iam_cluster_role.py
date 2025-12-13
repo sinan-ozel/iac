@@ -4,7 +4,7 @@ import json
 import boto3
 
 
-REGION = os.environ.get('REGION', 'ca-central-1')
+REGION = os.environ.get('AWS_REGION', 'ca-central-1')
 CLUSTER_NAME = os.environ.get('CLUSTER_NAME')
 AWS_ACCOUNT_ID = os.environ.get('AWS_ACCOUNT_ID')
 

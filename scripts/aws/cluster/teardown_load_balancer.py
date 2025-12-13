@@ -6,7 +6,7 @@ from time import sleep
 from helpers import wait_until
 
 
-REGION = os.environ.get('REGION', 'ca-central-1')
+REGION = os.environ.get('AWS_REGION', 'ca-central-1')
 CLUSTER_NAME = os.environ['CLUSTER_NAME']
 
 session = boto3.Session(region_name=REGION)

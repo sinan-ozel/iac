@@ -70,9 +70,9 @@ def main():
     parser.add_argument("--repo-name", required=True, help="GitHub repo name")
     args = parser.parse_args()
 
-    REGION = os.environ.get("REGION")
+    REGION = os.environ.get("AWS_REGION")
     if not REGION:
-        sys.exit("ERROR: REGION environment variable is not set. Please set it before running the container.")
+        sys.exit("ERROR: AWS_REGION environment variable is not set. Please set it before running the container.")
     GITHUB_ORGANIZATION_NAME = os.environ.get("GITHUB_ORGANIZATION_NAME")
     if not GITHUB_ORGANIZATION_NAME:
         sys.exit("ERROR: GITHUB_ORGANIZATION_NAME environment variable is not set. Please set it before running the container.")
